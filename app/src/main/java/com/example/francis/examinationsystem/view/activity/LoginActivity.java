@@ -1,7 +1,6 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -12,7 +11,6 @@ import com.example.francis.examinationsystem.presenter.LoginPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -29,11 +27,25 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
     @BindView(R.id.btn_login)
     Button btnLogin;
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+    protected int getLayout() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void loadData() {
+
     }
 
     @Override
@@ -48,7 +60,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
     @Override
     public void showToast(String message) {
-        Toaster.showShort(this,message);
+        Toaster.showShort(message);
     }
 
     @Override

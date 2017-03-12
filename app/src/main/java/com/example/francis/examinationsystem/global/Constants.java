@@ -14,6 +14,7 @@ public class Constants {
         public static final boolean ENCRYPTED = false;
         public static final String DB_NAME = "examination-db";
         public static final String DB_NAME_ENCRYPTED = "examination-db-encrypted";
-
     }
+
+
 }
