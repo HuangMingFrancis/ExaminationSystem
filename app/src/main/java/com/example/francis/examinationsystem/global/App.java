@@ -15,7 +15,7 @@ import org.greenrobot.greendao.database.Database;
 public class App extends Application {
     public static Context mContext;
 
-    private DaoSession daoSession;
+    private static DaoSession daoSession;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -34,7 +34,7 @@ public class App extends Application {
         daoSession = new DaoMaster(db).newSession();
     }
 
-    public DaoSession getDaoSession() {
+    public static DaoSession getDaoSession() {
         return daoSession;
     }
 }

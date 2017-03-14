@@ -12,31 +12,33 @@ import com.example.francis.examinationsystem.model.login.LoginByHttpModel;
  * Created by Francis on 2017-3-10.
  */
 
-public class LoginPresenter extends BasePresenter<ILoginView>{
+public class LoginPresenter extends BasePresenter<ILoginView> {
 
     private LoginByDB loginByDB;
     private LoginByHttpModel loginByHttpModel;
+    private static final String TAG = "LoginPresenter";
 
     public LoginPresenter() {
-        loginByDB=new LoginByDB();
-        loginByHttpModel=new LoginByHttpModel();
+        loginByDB = new LoginByDB();
+        loginByHttpModel = new LoginByHttpModel();
     }
 
     /**
      * 登录
+     *
      * @param name 用户名
-     * @param psw 密码
+     * @param psw  密码
      */
-    public void login(String name,String psw){
-        if (TextUtils.isEmpty(name)){
+    public void login(String name, String psw) {
+        if (TextUtils.isEmpty(name)) {
             getView().showToast("用户名不能为空!");
             return;
         }
-        if (TextUtils.isEmpty(psw)){
+        if (TextUtils.isEmpty(psw)) {
             getView().showToast("密码不能为空!");
             return;
         }
-        getView().loginSuccess();
+//        getView().loginSuccess();
         loginByDB.login(name, psw, new ICallBack() {
             @Override
             public void onSuccess(Object o) {
@@ -53,6 +55,5 @@ public class LoginPresenter extends BasePresenter<ILoginView>{
 
             }
         });
-
     }
 }

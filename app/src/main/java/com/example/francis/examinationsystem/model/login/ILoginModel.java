@@ -9,5 +9,5 @@ import com.example.francis.examinationsystem.model.ICallBack;
 
 public interface ILoginModel {
 
-    public void login(String username, String pwd,ICallBack callBack);
+    void login(String username, String pwd,ICallBack callBack);
 }
