@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.ILoginView;
-import com.example.francis.examinationsystem.model.ICallBack;
 import com.example.francis.examinationsystem.model.login.LoginByDB;
 import com.example.francis.examinationsystem.model.login.LoginByHttpModel;
 
@@ -38,22 +37,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
             getView().showToast("密码不能为空!");
             return;
         }
-//        getView().loginSuccess();
-        loginByDB.login(name, psw, new ICallBack() {
-            @Override
-            public void onSuccess(Object o) {
+        getView().loginSuccess();
 
-            }
-
-            @Override
-            public void onFail(String msg) {
-
-            }
-
-            @Override
-            public void onError(String code, String msg) {
-
-            }
-        });
     }
 }
