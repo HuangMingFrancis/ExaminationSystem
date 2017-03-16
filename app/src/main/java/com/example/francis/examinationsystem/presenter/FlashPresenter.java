@@ -19,18 +19,18 @@ public class FlashPresenter extends BasePresenter<IFlashView> {
         isFirstIn=ProjectSPUtils.getIsFirstLogin();
         isLogin=ProjectSPUtils.getIsLogin(false);
 
-        if (!isFirstIn){
-            ProjectSPUtils.setIsFirstLogin(true);
-            getView().goGuideActivity();
-            return;
-        }
-        if (isFirstIn){
+//        if (!isFirstIn){
+//            ProjectSPUtils.setIsFirstLogin(true);
+//            getView().goGuideActivity();
+//            return;
+//        }
+//        if (isFirstIn){
             if (!isLogin){
                 getView().goLoginActivity();
             }else {
                 getView().goMainActivity();
             }
-        }
+//        }
     }
 
 }
