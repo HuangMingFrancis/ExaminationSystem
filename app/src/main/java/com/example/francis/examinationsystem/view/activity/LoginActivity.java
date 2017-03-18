@@ -1,7 +1,10 @@
 package com.example.francis.examinationsystem.view.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,6 +38,8 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
     Button btnLoginLogin;
     @BindView(R.id.tv_login_register)
     TextView tvLoginRegister;
+
+    private AlertDialog RegisterDialog;
 
     @Override
     protected int getLayout() {
@@ -83,8 +88,61 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
     }
 
 
-    @OnClick(R.id.btn_login_login)
-    public void onClick() {
-        mPresenter.login(etLoginName.getText().toString(), etLoginPassword.getText().toString());
+    @OnClick({R.id.btn_login_login, R.id.tv_login_register})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_login_login:
+                mPresenter.login(etLoginName.getText().toString(), etLoginPassword.getText().toString());
+                break;
+            case R.id.tv_login_register:
+                showRegisterDialog();
+                break;
+        }
+    }
+
+    private void showRegisterDialog() {
+        RegisterDialog = new AlertDialog.Builder(mContext).create();
+        RegisterDialog.setCanceledOnTouchOutside(false);
+        View view;
+
+        view = LayoutInflater.from(mContext).inflate(R.layout.dialog_register_teacher, null);
+
+        final EditText et_register_account = (EditText) view.findViewById(R.id.et_register_account);
+        final EditText et_register_name = (EditText) view.findViewById(R.id.et_register_name);
+        final EditText et_register_password = (EditText) view.findViewById(R.id.et_register_password);
+        final EditText et_register_school = (EditText) view.findViewById(R.id.et_register_school);
+        Button btn_register = (Button) view.findViewById(R.id.btn_register);
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RegisterDialog.dismiss();
+            }
+        });
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!et_register_account.getText().toString().equals("") &&
+                        !et_register_password.getText().toString().equals("") &&
+                        !et_register_school.getText().toString().equals("") &&
+                        !et_register_name.getText().toString().equals("")) {
+
+                } else {
+                    showRegisterFailDialog();
+                }
+
+            }
+        });
+
+        RegisterDialog.setView(view);
+        RegisterDialog.show();
+
+    }
+
+    private void showRegisterFailDialog() {
+        new AlertDialog.Builder(mContext).setTitle("注册失败").setMessage("不能为空,请填写")
+                .setPositiveButton("确认", null).setNegativeButton("取消", null).create().show();
     }
 }
