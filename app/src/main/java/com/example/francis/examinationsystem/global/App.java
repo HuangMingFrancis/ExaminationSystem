@@ -3,6 +3,7 @@ package com.example.francis.examinationsystem.global;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.util.db.AbstractDatabaseManager;
 
 /**
@@ -11,6 +12,8 @@ import com.example.francis.examinationsystem.util.db.AbstractDatabaseManager;
 
 public class App extends Application {
     public static Context mContext;
+
+    public static User mUser;
 
 //    private static DaoSession daoSession;
     @Override

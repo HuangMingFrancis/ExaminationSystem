@@ -1,8 +1,11 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
@@ -11,6 +14,7 @@ import com.example.francis.examinationsystem.presenter.LoginPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -20,13 +24,17 @@ import butterknife.OnClick;
 
 public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> implements ILoginView {
 
+
+    @BindView(R.id.img_login_logo)
+    ImageView imgLoginLogo;
     @BindView(R.id.et_login_name)
     EditText etLoginName;
-    @BindView(R.id.et_login_psw)
-    EditText etLoginPsw;
-    @BindView(R.id.btn_login)
-    Button btnLogin;
-
+    @BindView(R.id.et_login_password)
+    EditText etLoginPassword;
+    @BindView(R.id.btn_login_login)
+    Button btnLoginLogin;
+    @BindView(R.id.tv_login_register)
+    TextView tvLoginRegister;
 
     @Override
     protected int getLayout() {
@@ -55,7 +63,8 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
     @Override
     public void loginSuccess() {
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -73,8 +82,9 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
     }
 
-    @OnClick(R.id.btn_login)
+
+    @OnClick(R.id.btn_login_login)
     public void onClick() {
-        mPresenter.login(etLoginName.getText().toString(),etLoginPsw.getText().toString());
+        mPresenter.login(etLoginName.getText().toString(), etLoginPassword.getText().toString());
     }
 }

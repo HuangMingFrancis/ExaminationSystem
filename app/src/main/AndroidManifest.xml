@@ -41,6 +41,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
+        <activity android:name=".view.activity.SearchActivity"/>
+        <activity android:name=".view.activity.AccountActivity"/>
+        <activity android:name=".view.activity.AccountUpdateActivity"/>
     </application>
 
 </manifest>

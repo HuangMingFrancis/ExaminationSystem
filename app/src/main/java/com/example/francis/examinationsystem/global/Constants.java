@@ -1,5 +1,9 @@
 package com.example.francis.examinationsystem.global;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * Created by Francis on 2017-3-10.
  * 常量
@@ -30,6 +34,22 @@ public class Constants {
     // 工程相关常量
     public static class Project {
         public static final String ProjectName = "ES";
+    }
+
+
+    public static class MainDrawerType{
+        //主界面打开的类型
+        public final static int COURSE = 1;
+        public final static int MESSAGE = 2;
+        public final static int CONTACTS = 3;
+    }
+
+
+    public static class Fold{
+        public final static String MAIN_FOLDER = "examination_system" + File.separator;
+        public final static String DATA_FOLDER = "data" + File.separator;
+        public static final String ALBUM_PATH = Environment.getExternalStorageDirectory() + File.separator + MAIN_FOLDER + File.separator;
+        public final static String PHOTO_FOLDER = ALBUM_PATH + "photo" + File.separator;
     }
 
 
