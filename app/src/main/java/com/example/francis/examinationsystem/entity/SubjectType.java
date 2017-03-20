@@ -1,29 +1,14 @@
 package com.example.francis.examinationsystem.entity;
 
-import cn.bmob.v3.BmobObject;
 
 /**
  * 题目类型
  * Created by wzn on 2017/3/19.
  */
 
-public class SubjectType extends BmobObject {
+public class SubjectType  {
     private Long id;
     private String name;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
