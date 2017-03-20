@@ -31,11 +31,7 @@
         </activity>
         <activity android:name=".view.activity.FlashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".view.activity.GuideActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -44,6 +40,13 @@
         <activity android:name=".view.activity.SearchActivity"/>
         <activity android:name=".view.activity.AccountActivity"/>
         <activity android:name=".view.activity.AccountUpdateActivity"/>
+        <activity android:name=".view.activity.ExamActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
