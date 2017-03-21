@@ -1,11 +1,16 @@
 package com.example.francis.examinationsystem.view.fragment;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.BaseFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Francis on 2017/3/20.
