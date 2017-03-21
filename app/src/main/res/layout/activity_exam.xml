@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="@color/colorPrimary"
+        android:id="@+id/rlyt_title"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"
+            android:id="@+id/iv_back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_time"
+            android:text="00:00:00"
+            android:textSize="@dimen/text_size_normal"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_answer_sheet"
+            android:src="@drawable/ic_search"
+            android:layout_toLeftOf="@id/tv_time"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/llyt_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_bottom_left"
+            android:layout_weight="1"
+            android:text="上一题"
+            android:textSize="@dimen/text_size_normal"
+            android:gravity="center"
+            android:paddingTop="@dimen/text_padding"
+            android:paddingBottom="@dimen/text_padding"
+            android:textColor="@color/white"
+            android:background="@color/actionsheet_blue"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_bottom_right"
+            android:layout_weight="1"
+            android:text="下一题"
+            android:textSize="@dimen/text_size_normal"
+            android:gravity="center"
+            android:paddingTop="@dimen/text_padding"
+            android:paddingBottom="@dimen/text_padding"
+            android:textColor="@color/white"
+            android:background="@color/actionsheet_blue"/>
+
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vp_subject"
+        android:layout_below="@id/rlyt_title"
+        android:layout_above="@id/llyt_bottom">
+
+    </android.support.v4.view.ViewPager>
+
+
+</RelativeLayout>

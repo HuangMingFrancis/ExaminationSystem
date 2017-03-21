@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
+import com.example.francis.examinationsystem.global.App;
+
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -26,9 +28,9 @@ public class NetUtils {
      * @param context
      * @return
      */
-    public static boolean isConnected(Context context) {
+    public static boolean isConnected() {
 
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivity = (ConnectivityManager) App.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (null != connectivity) {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
@@ -44,8 +46,8 @@ public class NetUtils {
     /**
      * 判断是否是wifi连接
      */
-    public static boolean isWifi(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isWifi() {
+        ConnectivityManager cm = (ConnectivityManager) App.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm == null)
             return false;

@@ -44,6 +44,12 @@
         <activity android:name=".view.activity.SearchActivity"/>
         <activity android:name=".view.activity.AccountActivity"/>
         <activity android:name=".view.activity.AccountUpdateActivity"/>
+        <activity android:name=".view.activity.ExamActivity">
+            </activity>
+        <activity android:name=".view.activity.ExaminationActivity"/>
+        <activity android:name=".view.activity.AddExaminatinoActivity"/>
+        <activity android:name=".view.activity.AddExamActivity"/>
+        <activity android:name=".view.activity.TitleDetailsActivity"/>
     </application>
 
 </manifest>

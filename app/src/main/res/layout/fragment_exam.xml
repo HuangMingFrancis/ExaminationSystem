@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/text_padding"
+            android:paddingBottom="@dimen/text_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:background="@color/alertdialog_line">
+            <TextView
+                android:id="@+id/tv_paper_titie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HTML/CSS专项练习"
+                android:textSize="@dimen/text_size_normal"
+                android:textColor="@color/black_a"/>
+            <TextView
+                android:id="@+id/tv_title_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2/10"
+                android:textSize="@dimen/text_size_normal"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/colorBottomTextSelected"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>
