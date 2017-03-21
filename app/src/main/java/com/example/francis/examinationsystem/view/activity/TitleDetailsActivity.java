@@ -1,6 +1,5 @@
 package com.example.francis.examinationsystem.view.activity;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -10,7 +9,6 @@ import com.example.francis.examinationsystem.contract.ITitleDetailsView;
 import com.example.francis.examinationsystem.presenter.TitleDetailsPresenter;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Francis on 2017/3/21.
@@ -19,6 +17,8 @@ import butterknife.ButterKnife;
 public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, TitleDetailsPresenter> implements ITitleDetailsView {
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
+
+
 
     @Override
     public void showToast(String message) {
@@ -37,7 +37,7 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
 
     @Override
     protected int getLayout() {
-        return R.layout.activity_title_details;
+        return R.layout.activity_title_details_judge;
     }
 
     @Override
