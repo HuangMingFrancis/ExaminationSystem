@@ -135,7 +135,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
                         !et_register_school.getText().toString().equals("") &&
                         !et_register_name.getText().toString().equals("")) {
                     mPresenter.register(et_register_account.getText().toString(), et_register_password.getText().toString()
-                            , et_register_name.getText().toString(), et_register_school.getText().toString());
+                            , et_register_name.getText().toString(), et_register_school.getText().toString(),0);
 
                 } else {
                     showRegisterFailDialog();

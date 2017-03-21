@@ -95,7 +95,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         Logger DEFAULT = new Logger() {
             @Override
             public void log(String message) {
-                Log.w("",message);
+                Log.w("http",message);
             }
         };
     }

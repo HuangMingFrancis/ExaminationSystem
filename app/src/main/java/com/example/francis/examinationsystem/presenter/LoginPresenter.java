@@ -6,6 +6,7 @@ import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.ILoginView;
 import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.bmob.BmobErrorData;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.model.login.LoginByDB;
 import com.example.francis.examinationsystem.model.login.LoginByHttpModel;
 import com.example.francis.examinationsystem.model.user.UserModel;
@@ -52,8 +53,13 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                 .subscribe(new Action1<User>() {
                     @Override
                     public void call(User user) {
-                        getView().loginSuccess();
                         getView().hideLoading();
+                        if (user != null) {
+                            App.mUser = user;
+                            getView().loginSuccess();
+                        } else {
+                            getView().showToast("账号或密码错误");
+                        }
                     }
                 }, new BmobErrorAction() {
                     @Override
@@ -65,18 +71,20 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
 
     }
 
-    public void register(final String account, String psw, String name, String school) {
+    public void register(final String account, String psw, String name, String school,int type) {
         User user = new User();
         user.setUserAccount(account);
         user.setUserPsw(psw);
         user.setUserName(name);
         user.setSchool(school);
+        user.setType(type);
         getView().showLoading();
         userModel.register(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<User>() {
                     @Override
                     public void call(User user) {
+
                         getView().registerSuccess(account);
                         getView().hideLoading();
                     }

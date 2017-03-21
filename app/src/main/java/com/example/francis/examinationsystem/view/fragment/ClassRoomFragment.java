@@ -2,7 +2,6 @@ package com.example.francis.examinationsystem.view.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -10,10 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,9 +19,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.BasePresenterFragment;
 import com.example.francis.examinationsystem.contract.IClassRoomView;
+import com.example.francis.examinationsystem.entity.Course;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.presenter.ClassRoomPresenter;
 import com.example.francis.examinationsystem.util.NetUtils;
-import com.example.francis.examinationsystem.util.Toaster;
 import com.example.francis.examinationsystem.view.activity.ExaminationActivity;
 import com.example.francis.examinationsystem.view.adapter.CourseMainCourseAdapter;
 import com.shamanland.fab.FloatingActionButton;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -59,7 +56,7 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
     private BaseQuickAdapter mMainCourseAdapter;
 
-    private List<String> mCourses;
+    private List<Course> mCourses;
 
     @Override
     protected ClassRoomPresenter createPresenter() {
@@ -101,6 +98,11 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
         initAdapter();
 
+    }
+
+    @Override
+    protected void loadData() {
+        mPresenter.queryCourseList();
     }
 
     @Override
@@ -174,9 +176,10 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
             @Override
             public void onClick(View v) {
                 if (NetUtils.isConnected()) {
-                    mCourses.add(dialogCourse.getText().toString());
-                    mMainCourseAdapter.notifyDataSetChanged();
-                    mAddDialog.dismiss();
+                    Course course=new Course();
+                    course.setName( dialogCourse.getText().toString());
+                    course.setTeacherId(App.mUser.getId());
+                    mPresenter.addCourse(course);
                 } else {
                     showToast("没有网络连接");
                 }
@@ -198,4 +201,16 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
     }
 
+    @Override
+    public void addCourseSuccess(Course course) {
+        mCourses.add(course);
+        mMainCourseAdapter.notifyDataSetChanged();
+        mAddDialog.dismiss();
+    }
+
+    @Override
+    public void loadCourseListComplete(List<Course> lstCourse) {
+        mCourses.addAll(lstCourse);
+        mMainCourseAdapter.notifyDataSetChanged();
+    }
 }

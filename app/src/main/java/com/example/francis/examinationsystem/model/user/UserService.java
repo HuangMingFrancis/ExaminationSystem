@@ -1,6 +1,9 @@
 package com.example.francis.examinationsystem.model.user;
 
 import com.example.francis.examinationsystem.entity.User;
+import com.example.francis.examinationsystem.entity.bmob.DataResult;
+
+import org.json.JSONObject;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,5 +20,5 @@ public interface UserService {
     Observable<User> register(@Body User user);
 
     @GET("User")
-    Observable<User> login(@Query("where") String where);
+    Observable<DataResult<User>> login(@Query("where") String where);
 }

@@ -2,6 +2,7 @@ package com.example.francis.examinationsystem.model.course;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
+import com.example.francis.examinationsystem.entity.bmob.DataResult;
 
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -23,7 +24,7 @@ public interface CourseService {
     Observable<Course> queryCourse(@Query("where") String where );
 
     @GET("Course")
-    Observable<JSONObject> queryCourseList(@Query("where") String where);
+    Observable<DataResult<Course>> queryCourseList(@Query("where") String where);
 
     /**
      * 学生加入课程

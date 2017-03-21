@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.User;
+import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.http.Body;
 import retrofit2.http.Query;
@@ -38,19 +40,12 @@ public class CourseModel {
         return courseService.queryCourse(JSONObject.toJSONString(course));
     }
 
-    public Observable<List<Course>> queryCourseList(ArrayMap<String, Object> conditons) {
+    public Observable<List<Course>> queryCourseList(Map<String, Object> conditons) {
         return courseService.queryCourseList(JSONObject.toJSONString(conditons))
-                .flatMap(new Func1<JSONObject, Observable<List<Course>>>() {
+                .flatMap(new Func1<DataResult<Course>, Observable<List<Course>>>() {
                     @Override
-                    public Observable<List<Course>> call(final JSONObject jsonObject) {
-                        return Observable.create(new Observable.OnSubscribe<List<Course>>() {
-                            @Override
-                            public void call(Subscriber<? super List<Course>> subscriber) {
-                                List<Course> courses = JSONArray.parseArray(jsonObject.getString("results"), Course.class);
-                                subscriber.onNext(courses);
-                                subscriber.onCompleted();
-                            }
-                        });
+                    public Observable<List<Course>> call(final DataResult<Course> dataResult) {
+                        return Observable.just(dataResult.results);
                     }
                 })
                 .subscribeOn(Schedulers.io());

@@ -1,11 +1,20 @@
 package com.example.francis.examinationsystem.model.user;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.User;
+import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
+import org.json.JSONException;
+
+import java.util.List;
+
 import rx.Observable;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static com.alibaba.fastjson.JSON.parseArray;
 
 /**
  * Created by wzn on 2017/3/21.
@@ -27,6 +36,16 @@ public class UserModel {
         User user = new User();
         user.setUserAccount(loginName);
         user.setUserPsw(passWord);
-        return userService.login(JSONObject.toJSONString(user)).subscribeOn(Schedulers.io());
+        return userService.login(JSONObject.toJSONString(user))
+                .flatMap(new Func1<DataResult<User>, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(DataResult<User> userDataResult) {
+                        if (userDataResult.results.size()>0){
+                            return Observable.just(userDataResult.results.get(0));
+                        }else {
+                            return Observable.just(null);
+                        }
+                    }
+                }).subscribeOn(Schedulers.io());
     }
 }
