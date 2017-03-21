@@ -73,6 +73,12 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
     }
 
     @Override
+    public void registerSuccess(String userName) {
+        etLoginName.setText(userName);
+        RegisterDialog.hide();
+    }
+
+    @Override
     public void showToast(String message) {
         Toaster.showShort(message);
     }
@@ -128,6 +134,8 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
                         !et_register_password.getText().toString().equals("") &&
                         !et_register_school.getText().toString().equals("") &&
                         !et_register_name.getText().toString().equals("")) {
+                    mPresenter.register(et_register_account.getText().toString(), et_register_password.getText().toString()
+                            , et_register_name.getText().toString(), et_register_school.getText().toString());
 
                 } else {
                     showRegisterFailDialog();

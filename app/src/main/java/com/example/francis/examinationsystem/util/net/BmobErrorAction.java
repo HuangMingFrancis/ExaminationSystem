@@ -1,7 +1,7 @@
-package com.example.francis.examinationsystem.util;
+package com.example.francis.examinationsystem.util.net;
 
 
-import com.example.francis.examinationsystem.entity.BmobErrorData;
+import com.example.francis.examinationsystem.entity.bmob.BmobErrorData;
 
 import rx.functions.Action1;
 
@@ -15,10 +15,10 @@ public abstract class BmobErrorAction implements Action1<Throwable> {
     public void call(Throwable throwable) {
         BmobErrorData errorData = new BmobErrorData();
         errorData = errorData.handleError(throwable);
-        call(errorData.getError());
+        call(errorData);
     }
 
-    public abstract void call(String msg);
+    public abstract void call(BmobErrorData errorData);
 
 }
 

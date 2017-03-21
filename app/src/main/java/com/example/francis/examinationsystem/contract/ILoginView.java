@@ -8,4 +8,5 @@ import com.example.francis.examinationsystem.base.IBaseView;
 
 public interface ILoginView extends IBaseView{
     void loginSuccess();
+    void registerSuccess(String userName);
 }

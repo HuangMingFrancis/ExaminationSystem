@@ -4,8 +4,15 @@ import android.text.TextUtils;
 
 import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.ILoginView;
+import com.example.francis.examinationsystem.entity.User;
+import com.example.francis.examinationsystem.entity.bmob.BmobErrorData;
 import com.example.francis.examinationsystem.model.login.LoginByDB;
 import com.example.francis.examinationsystem.model.login.LoginByHttpModel;
+import com.example.francis.examinationsystem.model.user.UserModel;
+import com.example.francis.examinationsystem.util.net.BmobErrorAction;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by Francis on 2017-3-10.
@@ -15,11 +22,13 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
 
     private LoginByDB loginByDB;
     private LoginByHttpModel loginByHttpModel;
+    private UserModel userModel;
     private static final String TAG = "LoginPresenter";
 
     public LoginPresenter() {
         loginByDB = new LoginByDB();
         loginByHttpModel = new LoginByHttpModel();
+        userModel = new UserModel();
     }
 
     /**
@@ -37,7 +46,46 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
             getView().showToast("密码不能为空!");
             return;
         }
-        getView().loginSuccess();
+        getView().showLoading();
+        userModel.login(name, psw)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        getView().loginSuccess();
+                        getView().hideLoading();
+                    }
+                }, new BmobErrorAction() {
+                    @Override
+                    public void call(BmobErrorData errorData) {
+                        getView().hideLoading();
+                        getView().showToast(errorData.getError());
+                    }
+                });
 
+    }
+
+    public void register(final String account, String psw, String name, String school) {
+        User user = new User();
+        user.setUserAccount(account);
+        user.setUserPsw(psw);
+        user.setUserName(name);
+        user.setSchool(school);
+        getView().showLoading();
+        userModel.register(user)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        getView().registerSuccess(account);
+                        getView().hideLoading();
+                    }
+                }, new BmobErrorAction() {
+                    @Override
+                    public void call(BmobErrorData errorData) {
+                        getView().hideLoading();
+                        getView().showToast(errorData.getError());
+                    }
+                });
     }
 }

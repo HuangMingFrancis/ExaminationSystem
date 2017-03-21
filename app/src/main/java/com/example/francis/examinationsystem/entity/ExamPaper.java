@@ -10,7 +10,7 @@ import java.util.List;
  * Created by wzn on 2017/3/19.
  */
 
-public class ExamPaper  {
+public class ExamPaper extends BaseObject {
     private Long id;
     private String name;
     /**
@@ -34,4 +34,13 @@ public class ExamPaper  {
      */
     private Date planEndDate;
 
+    public ExamPaper(Long id, String name, Long courseTypeId, Long courseId, List<Long> lstSubjectIds, Date planStartDate, Date planEndDate) {
+        this.id = id;
+        this.name = name;
+        this.courseTypeId = courseTypeId;
+        this.courseId = courseId;
+        this.lstSubjectIds = lstSubjectIds;
+        this.planStartDate = planStartDate;
+        this.planEndDate = planEndDate;
+    }
 }

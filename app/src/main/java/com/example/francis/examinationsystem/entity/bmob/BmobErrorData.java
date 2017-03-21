@@ -1,4 +1,4 @@
-package com.example.francis.examinationsystem.entity;
+package com.example.francis.examinationsystem.entity.bmob;
 
 import com.alibaba.fastjson.JSONObject;
 
