@@ -43,4 +43,60 @@ public class ExamPaper extends BaseObject {
         this.planStartDate = planStartDate;
         this.planEndDate = planEndDate;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getCourseTypeId() {
+        return courseTypeId;
+    }
+
+    public void setCourseTypeId(Long courseTypeId) {
+        this.courseTypeId = courseTypeId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public List<Long> getLstSubjectIds() {
+        return lstSubjectIds;
+    }
+
+    public void setLstSubjectIds(List<Long> lstSubjectIds) {
+        this.lstSubjectIds = lstSubjectIds;
+    }
+
+    public Date getPlanStartDate() {
+        return planStartDate;
+    }
+
+    public void setPlanStartDate(Date planStartDate) {
+        this.planStartDate = planStartDate;
+    }
+
+    public Date getPlanEndDate() {
+        return planEndDate;
+    }
+
+    public void setPlanEndDate(Date planEndDate) {
+        this.planEndDate = planEndDate;
+    }
 }

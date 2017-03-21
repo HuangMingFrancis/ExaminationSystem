@@ -3,15 +3,23 @@ package com.example.francis.examinationsystem.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IExaminationView;
+import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.presenter.ExaminationPresenter;
+import com.example.francis.examinationsystem.view.adapter.ExaminationAdapter;
 import com.shamanland.fab.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +38,9 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
     SwipeRefreshLayout freshExamination;
     @BindView(R.id.btn_course_tab_publish)
     FloatingActionButton btnCourseTabPublish;
+
+    List<ExamPaper> lstExamPapers;
+    ExaminationAdapter mExaminationAdapter;
 
 
     @Override
@@ -54,7 +65,11 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void initData() {
-
+        lstExamPapers=new ArrayList<>();
+        LinearLayoutManager manager=new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
+        listExamination.setLayoutManager(manager);
+        mExaminationAdapter= new ExaminationAdapter(android.R.layout.simple_list_item_1,lstExamPapers) ;
+        listExamination.setAdapter(mExaminationAdapter);
     }
 
     @Override
@@ -64,7 +79,7 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void loadData() {
-
+        mPresenter.queryExamList(getIntent().getLongExtra("courseId",-1));
     }
 
     @Override
@@ -94,5 +109,11 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void loadExamListComplete(List<ExamPaper> lstExamPapers) {
+        this.lstExamPapers.addAll(lstExamPapers);
+        mExaminationAdapter.notifyDataSetChanged();
     }
 }

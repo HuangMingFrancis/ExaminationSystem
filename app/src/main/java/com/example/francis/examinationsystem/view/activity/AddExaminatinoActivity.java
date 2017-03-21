@@ -133,7 +133,12 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                 showTimeDialog();
                 break;
             case R.id.btn_exam_submit:
-                to(AddExamActivity.class,new Intent());
+//                Intent intent=new Intent();
+//                intent.putExtra("startDate",);
+//                intent.putExtra("endDate",);
+//                intent.putExtra("name",);
+//                intent.putExtra("describe",);
+//                to(AddExamActivity.class,);
                 break;
         }
     }

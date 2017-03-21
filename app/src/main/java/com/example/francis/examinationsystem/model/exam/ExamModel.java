@@ -2,8 +2,10 @@ package com.example.francis.examinationsystem.model.exam;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
+import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 
@@ -53,15 +55,10 @@ public class ExamModel {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("courseId", courseId);
         return examService.queryExamPaperList(jsonObject.toJSONString())
-                .flatMap(new Func1<JSONObject, Observable<List<ExamPaper>>>() {
+                .flatMap(new Func1<DataResult<ExamPaper>, Observable<List<ExamPaper>>>() {
                     @Override
-                    public Observable<List<ExamPaper>> call(final JSONObject jsonObject) {
-                        return Observable.create(new Observable.OnSubscribe<List<ExamPaper>>() {
-                            @Override
-                            public void call(Subscriber<? super List<ExamPaper>> subscriber) {
-                                subscriber.onNext(JSONArray.parseArray(jsonObject.getString("results"), ExamPaper.class));
-                            }
-                        });
+                    public Observable<List<ExamPaper>> call(DataResult<ExamPaper> dataResult) {
+                        return Observable.just(dataResult.results);
                     }
                 })
                 .subscribeOn(Schedulers.io());
@@ -71,7 +68,7 @@ public class ExamModel {
         return null;
     }
 
-    public Observable<Subject> querySubject( String where) {
+    public Observable<Subject> querySubject(String where) {
         return null;
     }
 

@@ -37,7 +37,18 @@ public class CourseModel {
     }
 
     public Observable<Course> queryCourse(Course course) {
-        return courseService.queryCourse(JSONObject.toJSONString(course));
+        return courseService.queryCourseList(JSONObject.toJSONString(course))
+                .flatMap(new Func1<DataResult<Course>, Observable<Course>>() {
+                    @Override
+                    public Observable<Course> call(DataResult<Course> dataResult) {
+                        if (dataResult.results.size() > 0) {
+                            return Observable.just(dataResult.results.get(0));
+                        } else {
+                            return Observable.just(null);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 
     public Observable<List<Course>> queryCourseList(Map<String, Object> conditons) {
@@ -58,8 +69,10 @@ public class CourseModel {
                 .flatMap(new Func1<Course, Observable<Course>>() {
                     @Override
                     public Observable<Course> call(Course course) {
+                        Course newCourse = new Course();
+                        newCourse.setLstStudents(course.getLstStudents());
                         course.getLstStudents().add(studentId);
-                        return courseService.joinCourse(objectId, course);
+                        return courseService.updateCourse(objectId, course);
                     }
                 })
                 .subscribeOn(Schedulers.io());

@@ -6,15 +6,12 @@ import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
-import org.json.JSONException;
 
-import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static com.alibaba.fastjson.JSON.parseArray;
 
 /**
  * Created by wzn on 2017/3/21.

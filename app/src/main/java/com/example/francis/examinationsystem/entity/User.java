@@ -22,6 +22,23 @@ public class User extends BaseObject {
     private String school;//学校
     private int type;//类别（0为老师，1为学生）
 
+    @Generated(hash = 630143531)
+    public User(Long id, String userAccount, String userPsw, String userName,
+            String userHead, String userEmail, String school, int type) {
+        this.id = id;
+        this.userAccount = userAccount;
+        this.userPsw = userPsw;
+        this.userName = userName;
+        this.userHead = userHead;
+        this.userEmail = userEmail;
+        this.school = school;
+        this.type = type;
+    }
+
+    @Generated(hash = 586692638)
+    public User() {
+    }
+
     public Long getId() {
         return id;
     }

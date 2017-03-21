@@ -14,8 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Created by Francis on 2017/3/18.
@@ -32,6 +34,14 @@ public class ClassRoomPresenter extends BasePresenter<IClassRoomView> {
         getView().showLoading();
         final String courseName=course.getName();
         courseModel.addCourse(course)
+                .flatMap(new Func1<Course, Observable<Course>>() {
+                    @Override
+                    public Observable<Course> call(Course course) {
+                        course.setCreatedAt(null);
+                        course.setUpdatedAt(null);
+                        return courseModel.queryCourse(course);
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Course>() {
                     @Override

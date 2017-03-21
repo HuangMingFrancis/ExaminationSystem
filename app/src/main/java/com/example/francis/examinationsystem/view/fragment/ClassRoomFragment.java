@@ -37,7 +37,7 @@ import butterknife.OnClick;
  * Created by Francis on 2017/3/18.
  */
 
-public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, ClassRoomPresenter> implements IClassRoomView , DialogInterface.OnDismissListener, SwipeRefreshLayout.OnRefreshListener{
+public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, ClassRoomPresenter> implements IClassRoomView, DialogInterface.OnDismissListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.btn_main_add)
     FloatingActionButton btnMainAdd;
     @BindView(R.id.list_main_course)
@@ -71,7 +71,7 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
     @Override
     public void showToast(String message) {
 //        Toaster.showShort(message);
-        Snackbar.make(btnMainAdd,message,Snackbar.LENGTH_SHORT);
+        Snackbar.make(btnMainAdd, message, Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -112,14 +112,16 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
         mMainCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(getActivity(),ExaminationActivity.class));
+                Intent intent = new Intent(getActivity(), ExaminationActivity.class);
+                intent.putExtra("courseId", mCourses.get(position).getId());
+                startActivity(intent);
             }
         });
     }
 
     private void initAdapter() {
-        mCourses=new ArrayList<>();
-        mMainCourseAdapter=new CourseMainCourseAdapter(R.layout.item_main_course,mCourses);
+        mCourses = new ArrayList<>();
+        mMainCourseAdapter = new CourseMainCourseAdapter(R.layout.item_main_course, mCourses);
         listMainCourse.setAdapter(mMainCourseAdapter);
 
     }
@@ -176,8 +178,8 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
             @Override
             public void onClick(View v) {
                 if (NetUtils.isConnected()) {
-                    Course course=new Course();
-                    course.setName( dialogCourse.getText().toString());
+                    Course course = new Course();
+                    course.setName(dialogCourse.getText().toString());
                     course.setTeacherId(App.mUser.getId());
                     mPresenter.addCourse(course);
                 } else {
