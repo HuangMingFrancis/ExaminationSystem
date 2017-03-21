@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 
@@ -45,4 +46,13 @@ public class UserModel {
                     }
                 }).subscribeOn(Schedulers.io());
     }
+
+
+    public Observable<User> updatePsw(String newPsw){
+        User user=new User();
+        user.setUserPsw(newPsw);
+        return userService.updatePsw(App.mUser.getObjectId(), user)
+                .subscribeOn(Schedulers.io());
+    }
+
 }

@@ -7,4 +7,5 @@ import com.example.francis.examinationsystem.base.IBaseView;
  */
 
 public interface IAccountUpdateView extends IBaseView{
+    void updatePswSuccess();
 }

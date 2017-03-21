@@ -1,6 +1,7 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -34,7 +35,8 @@ public class AccountUpdateActivity extends MVPBaseActivity<IAccountUpdateView, A
 
     @Override
     public void showToast(String message) {
-        Toaster.showShort(message);
+//        Toaster.showShort(message);
+        Snackbar.make(etDialogPasswordConfirm,message,Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -59,16 +61,9 @@ public class AccountUpdateActivity extends MVPBaseActivity<IAccountUpdateView, A
 
     @Override
     protected void initView() {
-//        initToolbar();
         setToolBar(toolbarMain,"修改密码");
     }
 
-//    private void initToolbar() {
-//        setSupportActionBar(toolbarMain);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setTitle("修改密码");
-//    }
 
     @Override
     protected void loadData() {
@@ -82,7 +77,7 @@ public class AccountUpdateActivity extends MVPBaseActivity<IAccountUpdateView, A
 
     @OnClick(R.id.btn_dialog_password_save)
     public void onClick() {
-
+        mPresenter.updatePsw(etDialogPasswordPass.getText().toString(),etDialogPasswordNew.getText().toString(),etDialogPasswordConfirm.getText().toString());
     }
 
 
@@ -95,5 +90,10 @@ public class AccountUpdateActivity extends MVPBaseActivity<IAccountUpdateView, A
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void updatePswSuccess() {
+        finish();
     }
 }

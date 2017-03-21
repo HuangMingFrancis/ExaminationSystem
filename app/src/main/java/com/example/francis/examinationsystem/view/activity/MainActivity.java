@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IMainView;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.ClassRoomPresenter;
 import com.example.francis.examinationsystem.presenter.MainPresent;
@@ -114,6 +115,9 @@ public class MainActivity extends MVPBaseActivity<IMainView, MainPresent> implem
 
     private void initDrawerContent() {
         tvMainDrawerCourse.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+        if (App.mUser!=null){
+            tvMainUserName.setText(App.mUser.getUserAccount());
+        }
     }
 
     private void initToolbar() {

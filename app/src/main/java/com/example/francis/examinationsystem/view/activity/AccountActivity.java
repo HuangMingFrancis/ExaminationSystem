@@ -16,6 +16,7 @@ import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IAccountView;
 import com.example.francis.examinationsystem.entity.User;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.AccountPresenter;
 import com.example.francis.examinationsystem.util.ImageLoaderUtils;
@@ -83,7 +84,11 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
 
     @Override
     protected void initData() {
-
+        if (App.mUser!=null){
+            tvAccount.setText(App.mUser.getUserAccount());
+            tvName.setText(App.mUser.getUserName());
+            tvSchool.setText(App.mUser.getSchool());
+        }
     }
 
     @Override

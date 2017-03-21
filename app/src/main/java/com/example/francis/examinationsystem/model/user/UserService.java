@@ -7,6 +7,8 @@ import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -20,4 +22,7 @@ public interface UserService {
 
     @GET("User")
     Observable<DataResult<User>> login(@Query("where") String where);
+
+    @PUT("User/{objectId}")
+    Observable<User> updatePsw(@Path("objectId") String objectId, @Body User user);
 }
