@@ -38,5 +38,5 @@ public class TimeUtils {
         return simpleDateFormat.format(date);
     }
 
-    ;
+
 }

@@ -74,6 +74,14 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
         listExamination.setLayoutManager(manager);
         mExaminationAdapter = new ExaminationAdapter(lstExamPapers);
         listExamination.setAdapter(mExaminationAdapter);
+        mExaminationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent=new Intent();
+                intent.putExtra("examPaperId",lstExamPapers.get(position).getId());
+                return false;
+            }
+        });
     }
 
     @Override
