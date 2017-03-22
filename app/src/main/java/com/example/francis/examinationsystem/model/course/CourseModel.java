@@ -1,8 +1,10 @@
 package com.example.francis.examinationsystem.model.course;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
+import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 import java.util.List;
@@ -91,8 +93,9 @@ public class CourseModel {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<List<Course>> queryCourseListByCourseName(String bql,Map<String, Object> conditons) {
-        return courseService.queryCourseListByCourseName(bql,JSONObject.toJSONString(conditons))
+    public Observable<List<Course>> queryCourseListByCourseName(String bql,List<Object> conditons) {
+        return RetrofitHelper.getRetrofit(Constants.Project.bqlBaseUrl).create(CourseService.class)
+                .queryCourseListByCourseName(Constants.Project.bqlBaseUrl,bql, JSONArray.toJSONString(conditons))
                 .flatMap(new Func1<DataResult<Course>, Observable<List<Course>>>() {
                     @Override
                     public Observable<List<Course>> call(final DataResult<Course> dataResult) {

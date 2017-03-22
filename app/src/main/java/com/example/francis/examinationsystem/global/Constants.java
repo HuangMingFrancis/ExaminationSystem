@@ -42,6 +42,8 @@ public class Constants {
         public static final long networkTimeout = 10;
         public static final String baseUrl="https://api.bmob.cn/1/classes/";
 
+        public static final String bqlBaseUrl="https://api.bmob.cn/1/cloudQuery/";
+
     }
 
 

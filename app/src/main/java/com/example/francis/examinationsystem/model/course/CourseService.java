@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -32,6 +33,7 @@ public interface CourseService {
     @DELETE("Course")
     Observable<JSONObject> deleteCourse(@Query("objectId") String objectId);
 
-    @GET("Course")
-    Observable<DataResult<Course>> queryCourseListByCourseName(@Query("bql")String bql,@Query("value")String values);
+    @GET
+    Observable<DataResult<Course>> queryCourseListByCourseName(@Url String url,@Query("bql") String bql, @Query("values") String values);
+    //,@Query("values")String values
 }

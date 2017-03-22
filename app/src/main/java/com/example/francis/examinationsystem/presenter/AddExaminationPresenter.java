@@ -1,5 +1,7 @@
 package com.example.francis.examinationsystem.presenter;
 
+import android.text.TextUtils;
+
 import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.IAddExaminationView;
 
@@ -8,4 +10,5 @@ import com.example.francis.examinationsystem.contract.IAddExaminationView;
  */
 
 public class AddExaminationPresenter extends BasePresenter<IAddExaminationView> {
+
 }

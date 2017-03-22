@@ -142,11 +142,32 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
 
     @Override
     public void onClick(View v) {
+        switch (examType){
+            case Constants.ExamType.EXAM_JUDGE:
 
+                break;
+
+            case Constants.ExamType.EXAM_SINGLE:
+                break;
+
+            case Constants.ExamType.EXAM_MUTIPLE:
+                break;
+
+            case Constants.ExamType.EXAM_SHORT:
+                break;
+
+        }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
+            case R.id.rb_add_exam_true:
+                break;
 
+            case R.id.rb_add_exam_false:
+                break;
+
+        }
     }
 }

@@ -31,8 +31,8 @@ public class RetrofitHelper {
         retrofit = retrofit1;
     }
 
-    public static void setRetrofit(String url) {
-        retrofit = new Retrofit.Builder()
+    public static Retrofit getRetrofit(String url) {
+        return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(OkHttpClientHelper.getClient())

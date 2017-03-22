@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -133,11 +134,19 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                 showTimeDialog();
                 break;
             case R.id.btn_exam_submit:
+                if (TextUtils.isEmpty(etExamTitle.getText())){
+                    showToast("测试题目不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(etExamContent.getText())){
+                    showToast("测试简介不能为空");
+                    return;
+                }
                 Intent intent=new Intent();
-//                intent.putExtra("startDate",);
-//                intent.putExtra("endDate",);
-//                intent.putExtra("name",);
-//                intent.putExtra("describe",);
+                intent.putExtra("startDate",tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString());
+                intent.putExtra("endDate",tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString());
+                intent.putExtra("name",etExamTitle.getText().toString());
+                intent.putExtra("describe",etExamContent.getText().toString());
                 to(AddExamActivity.class,intent);
                 break;
         }

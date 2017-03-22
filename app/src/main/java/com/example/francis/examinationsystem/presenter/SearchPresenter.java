@@ -31,19 +31,51 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
      * 搜索课程
      * @param courseName
      */
-    public void searchExam(String courseName){
+    public void searchExam(final String courseName){
         getView().showLoading();
-        String bql="select * from Course where teacherId=?";
-        List<Object> values=new ArrayList<>();
-        values.add("33");
-        Map<String, Object> conditions = new HashMap<>();
-        conditions.put("teacherId", App.mUser.getId());
-        courseModel.queryCourseListByCourseName(bql,conditions)
+//        String bql="select * from Course where teacherId="+App.mUser.getId();
+//        List<Object> values=new ArrayList<>();
+//        values.add(App.mUser.getId());
+//        Map<String, Object> conditions = new HashMap<>();
+//        conditions.put("teacherId", App.mUser.getId());
+//        courseModel.queryCourseListByCourseName(bql,values)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<List<Course>>() {
+//                    @Override
+//                    public void call(List<Course> courses) {
+//                        getView().hideLoading();
+//                        getView().getSearchCourseList(courses);
+//                    }
+//                }, new BmobErrorAction() {
+//                    @Override
+//                    public void call(BmobErrorData errorData) {
+//                        getView().hideLoading();
+//                        getView().showToast(errorData.getError());
+//                    }
+//                });
+
+//        Map<String, Object> conditions = new HashMap<>();
+//        if (App.mUser.getType()==0){
+//            conditions.put("teacherId", App.mUser.getId());
+//        }else{
+////            conditions.put("");
+//        }
+        String hql="select * from Course where teacherId=? and name like ?";
+        List<Object> conditions=new ArrayList<>();
+        conditions.add(7);
+        conditions.add("‘%"+courseName+"%’");
+        courseModel.queryCourseListByCourseName(hql,conditions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Course>>() {
                     @Override
                     public void call(List<Course> courses) {
                         getView().hideLoading();
+//                        List<Course> courses1=new ArrayList<Course>();
+//                        for (Course course:courses){
+//                            if (course.getName().contains(courseName))
+//                                courses1.add(course);
+//                        }
+//                        getView().getSearchCourseList(courses1);
                         getView().getSearchCourseList(courses);
                     }
                 }, new BmobErrorAction() {

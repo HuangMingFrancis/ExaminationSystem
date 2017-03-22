@@ -1,5 +1,6 @@
 package com.example.francis.examinationsystem.view.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -103,6 +105,18 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
                 mPresenter.searchExam(s.toString());
             }
         });
+
+
+
+        searchAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SearchActivity.this, ExaminationActivity.class);
+                intent.putExtra("courseId", searchCourse.get(position).getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
