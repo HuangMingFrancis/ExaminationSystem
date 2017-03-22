@@ -1,22 +1,32 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.ISearchView;
+import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.presenter.SearchPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
+import com.example.francis.examinationsystem.view.adapter.CourseMainCourseAdapter;
 import com.example.francis.examinationsystem.view.adapter.SearchTabPagerAdapter;
 import com.example.francis.examinationsystem.view.thirty.SlidingTabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,7 +42,14 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
     SlidingTabLayout stlSearchTabs;
     @BindView(R.id.vp_search_content)
     ViewPager vpSearchContent;
+    @BindView(R.id.list_search_course)
+    RecyclerView listSearchCourse;
+    @BindView(R.id.fresh_search_course)
+    SwipeRefreshLayout freshSearchCourse;
     private SearchTabPagerAdapter mSearchTabsPagerAdapter;
+
+    private List<Course> searchCourse;
+    private BaseQuickAdapter searchAdapter;
 
     @Override
     public void showToast(String message) {
@@ -56,19 +73,41 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
 
     @Override
     protected void initData() {
+        searchCourse=new ArrayList<>();
+        searchAdapter= new CourseMainCourseAdapter(R.layout.item_main_course, searchCourse);
+        listSearchCourse.setAdapter(searchAdapter);
 
     }
 
     @Override
     protected void initView() {
 
-        initTabsLayout();
+//    initTabsLayout();
 
+        listSearchCourse.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+
+        etSearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.i("http", "beforeTextChanged: "+s.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("http", "onTextChanged: "+s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i("http", "afterTextChanged: "+s.toString());
+                mPresenter.searchExam(s.toString());
+            }
+        });
     }
 
     @Override
     protected void loadData() {
-
+        mPresenter.searchExam(etSearchText.getText().toString());
     }
 
     @Override
@@ -98,5 +137,14 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
                 return 0;
             }
         });
+    }
+
+    @Override
+    public void getSearchCourseList(List<Course> searchCourseList) {
+        if (searchCourseList!=null){
+            searchCourse.clear();
+            searchCourse.addAll(searchCourseList);
+            searchAdapter.notifyDataSetChanged();
+        }
     }
 }

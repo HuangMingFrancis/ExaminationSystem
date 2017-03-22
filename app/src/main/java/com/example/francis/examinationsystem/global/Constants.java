@@ -60,5 +60,12 @@ public class Constants {
         public final static String PHOTO_FOLDER = ALBUM_PATH + "photo" + File.separator;
     }
 
+    //题目类型
+    public static class ExamType{
+        public final static int EXAM_JUDGE=0;
+        public final static int EXAM_MUTIPLE=1;
+        public final static int EXAM_SHORT=2;
+        public final static int EXAM_SINGLE=3;
+    }
 
 }

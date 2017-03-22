@@ -1,22 +1,14 @@
 package com.example.francis.examinationsystem.model.course;
 
-import android.util.ArrayMap;
-
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
-import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.http.Body;
-import retrofit2.http.Query;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -94,6 +86,17 @@ public class CourseModel {
                         } else {
                             return Observable.just(false);
                         }
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<List<Course>> queryCourseListByCourseName(String bql,Map<String, Object> conditons) {
+        return courseService.queryCourseListByCourseName(bql,JSONObject.toJSONString(conditons))
+                .flatMap(new Func1<DataResult<Course>, Observable<List<Course>>>() {
+                    @Override
+                    public Observable<List<Course>> call(final DataResult<Course> dataResult) {
+                        return Observable.just(dataResult.results);
                     }
                 })
                 .subscribeOn(Schedulers.io());

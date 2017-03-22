@@ -1,7 +1,5 @@
 package com.example.francis.examinationsystem.presenter;
 
-import android.util.ArrayMap;
-
 import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.IClassRoomView;
 import com.example.francis.examinationsystem.entity.Course;

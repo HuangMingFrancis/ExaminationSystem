@@ -1,7 +1,6 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IAddExamView;
+import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.AddExamPresenter;
 import com.example.francis.examinationsystem.view.adapter.ChooseSubjectAdapte;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -30,10 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.R.attr.type;
 
 /**
  * Created by Francis on 2017/3/21.
@@ -165,15 +162,23 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
         btnChooseExamCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent=new Intent();
                 switch (type) {
                     case 1:
-                        to(TitleDetailsActivity.class,new Intent());
+                        intent.putExtra("examType", Constants.ExamType.EXAM_JUDGE);
+                        to(TitleDetailsActivity.class,intent);
                         break;
                     case 2:
+                        intent.putExtra("examType", Constants.ExamType.EXAM_SINGLE);
+                        to(TitleDetailsActivity.class,intent);
                         break;
                     case 3:
+                        intent.putExtra("examType", Constants.ExamType.EXAM_MUTIPLE);
+                        to(TitleDetailsActivity.class,intent);
                         break;
                     case 4:
+                        intent.putExtra("examType", Constants.ExamType.EXAM_SHORT);
+                        to(TitleDetailsActivity.class,intent);
                         break;
                 }
                 dialog.dismiss();

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IAccountView;
-import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.AccountPresenter;
@@ -29,8 +27,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.example.francis.examinationsystem.R.id.img_account_user;
 
 /**
  * Created by Francis on 2017/3/18.
@@ -41,7 +40,7 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
     Toolbar toolbarMain;
     @BindView(R.id.tv_account)
     TextView tvAccount;
-    @BindView(R.id.img_account_user)
+    @BindView(img_account_user)
     ImageView imgAccountUser;
     @BindView(R.id.ll_account_userIcon)
     RelativeLayout llAccountUserIcon;
@@ -93,16 +92,8 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
 
     @Override
     protected void initView() {
-//        initToolbar();
         setToolBar(toolbarMain,"个人信息");
     }
-
-//    private void initToolbar() {
-//        setSupportActionBar(toolbarMain);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setTitle("个人信息");
-//    }
 
 
     @Override
@@ -116,10 +107,10 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
     }
 
 
-    @OnClick({R.id.img_account_user, R.id.ll_account_userIcon, R.id.tv_school, R.id.ll_account_password})
+    @OnClick({img_account_user, R.id.ll_account_userIcon, R.id.tv_school, R.id.ll_account_password})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_account_user:
+            case img_account_user:
                 showUpdateHeadDialog("选择图片", "拍照", "从相册中选择");
                 break;
             case R.id.ll_account_userIcon:
@@ -177,6 +168,10 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
                 e.printStackTrace();
             }
             ImageLoaderUtils.displayNoDisk(mContext, imgAccountUser, Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
+        }
+        if (requestCode == IntentUtils.CAMERA_REQUEST && resultCode == RESULT_OK) {
+            File file = new File(File_Path);
+            ImageLoaderUtils.display(mContext, imgAccountUser, file.getPath());
         }
     }
 

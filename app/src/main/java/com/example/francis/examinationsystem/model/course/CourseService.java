@@ -32,5 +32,6 @@ public interface CourseService {
     @DELETE("Course")
     Observable<JSONObject> deleteCourse(@Query("objectId") String objectId);
 
-
+    @GET("Course")
+    Observable<DataResult<Course>> queryCourseListByCourseName(@Query("bql")String bql,@Query("value")String values);
 }
