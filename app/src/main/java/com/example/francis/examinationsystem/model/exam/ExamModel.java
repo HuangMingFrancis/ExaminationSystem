@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
+import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
@@ -65,6 +66,8 @@ public class ExamModel {
     }
 
     public Observable<List<Long>> addSubjectList(List<Subject> lstSubjects) {
+
+
         return null;
     }
 
@@ -89,5 +92,21 @@ public class ExamModel {
                     }
                 })
                 .subscribeOn(Schedulers.io());
+    }
+
+
+    public Observable<SubjectType> querySubjectType(String where) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", where);
+        return examService.querySubjectType(jsonObject.toJSONString())
+                .flatMap(new Func1<SubjectType, Observable<SubjectType>>() {
+                    @Override
+                    public Observable<SubjectType> call(SubjectType subjectType) {
+                        if (subjectType!=null){
+                            return Observable.just(subjectType);
+                        }
+                        return null;
+                    }
+                });
     }
 }

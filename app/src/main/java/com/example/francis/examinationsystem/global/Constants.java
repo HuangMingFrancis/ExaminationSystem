@@ -64,10 +64,10 @@ public class Constants {
 
     //题目类型
     public static class ExamType{
-        public final static int EXAM_JUDGE=0;
-        public final static int EXAM_MUTIPLE=1;
-        public final static int EXAM_SHORT=2;
-        public final static int EXAM_SINGLE=3;
+        public final static int EXAM_JUDGE=3;
+        public final static int EXAM_MUTIPLE=2;
+        public final static int EXAM_SHORT=4;
+        public final static int EXAM_SINGLE=1;
     }
 
 }

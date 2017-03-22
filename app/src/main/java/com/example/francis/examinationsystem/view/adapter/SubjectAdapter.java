@@ -7,11 +7,11 @@ import com.example.francis.examinationsystem.entity.Subject;
 import java.util.List;
 
 /**
- * Created by Francis on 2017/3/21.
+ * Created by Francis on 2017/3/22.
  */
 
-public class ChooseSubjectAdapte extends BaseQuickAdapter<Subject,BaseViewHolder> {
-    public ChooseSubjectAdapte(int layoutResId, List<Subject> data) {
+public class SubjectAdapter extends BaseQuickAdapter<Subject,BaseViewHolder>{
+    public SubjectAdapter(int layoutResId, List<Subject> data) {
         super(layoutResId, data);
     }
 

@@ -1,6 +1,7 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +21,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IAddExamView;
+import com.example.francis.examinationsystem.entity.ExamPaper;
+import com.example.francis.examinationsystem.entity.Subject;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.AddExamPresenter;
+import com.example.francis.examinationsystem.util.Toaster;
 import com.example.francis.examinationsystem.view.adapter.ChooseSubjectAdapte;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,13 +54,18 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
     FloatingActionButton btnExamShortAnswer;
     @BindView(R.id.btn_exam_add)
     FloatingActionsMenu btnExamAdd;
+    @BindView(R.id.list_exam)
+    RecyclerView listExam;
 
     private BaseQuickAdapter mChooseSubjectAdapte;
-    private List<String> titles;
+    private List<Subject> titles;
+
+    private ExamPaper examPaper;
+
 
     @Override
     public void showToast(String message) {
-
+        Toaster.showShort(message);
     }
 
     @Override
@@ -75,13 +85,21 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
 
     @Override
     protected void initData() {
-        titles=new ArrayList<>();
-        mChooseSubjectAdapte=new ChooseSubjectAdapte(R.layout.item_choose_exam_subject,titles);
+        if (getIntent()!=null){
+            examPaper= (ExamPaper) getIntent().getSerializableExtra("examPaper");
+
+        }
+
+        titles = new ArrayList<>();
+        mChooseSubjectAdapte = new ChooseSubjectAdapte(R.layout.item_choose_exam_subject, titles);
+        listExam.setAdapter(mChooseSubjectAdapte);
+
     }
 
     @Override
     protected void initView() {
-        setToolBar(toolbarMain,"试卷标题");
+        setToolBar(toolbarMain, "试卷标题");
+        listExam.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
     }
 
     @Override
@@ -162,23 +180,23 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
         btnChooseExamCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 switch (type) {
                     case 1:
                         intent.putExtra("examType", Constants.ExamType.EXAM_JUDGE);
-                        to(TitleDetailsActivity.class,intent);
+                        toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
                     case 2:
                         intent.putExtra("examType", Constants.ExamType.EXAM_SINGLE);
-                        to(TitleDetailsActivity.class,intent);
+                        toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
                     case 3:
                         intent.putExtra("examType", Constants.ExamType.EXAM_MUTIPLE);
-                        to(TitleDetailsActivity.class,intent);
+                        toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
                     case 4:
                         intent.putExtra("examType", Constants.ExamType.EXAM_SHORT);
-                        to(TitleDetailsActivity.class,intent);
+                        toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
                 }
                 dialog.dismiss();
@@ -198,11 +216,38 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.send) {
+            mPresenter.addSubjects(titles);
         }
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == 1) {
+            if (data != null) {
+                Subject subject = (Subject) data.getSerializableExtra("subject");
+                titles.add(subject);
+                mChooseSubjectAdapte.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void addSubjectsSuccess(List<Long> subjectIds) {
+        mPresenter.addExamPager(subjectIds,examPaper);
+    }
+
+    @Override
+    public void addExamPaperSuccess(ExamPaper examPaper) {
+//        Intent intent=new Intent();
+//        intent.putExtra("examPaper",examPaper);
+        to(ExaminationActivity.class,new Intent());
+        finish();
     }
 }

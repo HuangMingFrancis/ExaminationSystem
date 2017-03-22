@@ -1,5 +1,6 @@
 package com.example.francis.examinationsystem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,9 +11,19 @@ import java.util.List;
  * Created by wzn on 2017/3/19.
  */
 
-public class ExamPaper extends BaseObject {
+public class ExamPaper extends BaseObject implements Serializable{
     private Long id;
     private String name;
+    private String des;
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
+    }
+
     /**
      * 课程类型
      */
@@ -34,15 +45,6 @@ public class ExamPaper extends BaseObject {
      */
     private Date planEndDate;
 
-    public ExamPaper(Long id, String name, Long courseTypeId, Long courseId, List<Long> lstSubjectIds, Date planStartDate, Date planEndDate) {
-        this.id = id;
-        this.name = name;
-        this.courseTypeId = courseTypeId;
-        this.courseId = courseId;
-        this.lstSubjectIds = lstSubjectIds;
-        this.planStartDate = planStartDate;
-        this.planEndDate = planEndDate;
-    }
 
     public Long getId() {
         return id;

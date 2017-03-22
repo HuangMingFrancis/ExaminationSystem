@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
+import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 
 import org.json.JSONArray;
@@ -55,5 +56,8 @@ public interface ExamService {
     @DELETE("Subject")
     Observable<JSONObject> deleteSubject(@Query("objectId") String objectId);
 
+    //查找subjectType
+    @GET("SubjectType")
+    Observable<SubjectType> querySubjectType(@Query("where") String where);
 
 }

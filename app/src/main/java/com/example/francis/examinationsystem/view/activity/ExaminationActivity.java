@@ -131,4 +131,10 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
         this.lstExamPapers.addAll(lstExamPapers);
         mExaminationAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadData();
+    }
 }

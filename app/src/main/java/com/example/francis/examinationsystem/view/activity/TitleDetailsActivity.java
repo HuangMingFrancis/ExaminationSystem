@@ -1,6 +1,8 @@
 package com.example.francis.examinationsystem.view.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,13 +10,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.ITitleDetailsView;
+import com.example.francis.examinationsystem.entity.Subject;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.presenter.TitleDetailsPresenter;
+import com.example.francis.examinationsystem.util.Toaster;
 
 import butterknife.BindView;
 
@@ -42,15 +47,21 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
     private CheckBox cb_add_exam_a,cb_add_exam_b,cb_add_exam_c,cb_add_exam_d;
 
 
+
     //题目类型
     private int examType=0;
 
     //具体题型界面
     private View view;
 
+    //正确答案
+    private String resultValue;
+    //选项
+    private String options;
+
     @Override
     public void showToast(String message) {
-
+        Toaster.showShort(message);
     }
 
     @Override
@@ -144,16 +155,34 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
     public void onClick(View v) {
         switch (examType){
             case Constants.ExamType.EXAM_JUDGE:
-
+                mPresenter.addExam(et_add_exam_grade.getText().toString(),et_add_exam_title.getText().toString(),examType,resultValue,options);
                 break;
 
             case Constants.ExamType.EXAM_SINGLE:
+                if (judgeOption())
+                    mPresenter.addExam(et_add_exam_grade.getText().toString(),et_add_exam_title.getText().toString(),examType,resultValue,options);
                 break;
 
             case Constants.ExamType.EXAM_MUTIPLE:
+                if (judgeOption()){
+                    if (cb_add_exam_a.isChecked())
+                        resultValue=resultValue+"1;";
+
+                    if (cb_add_exam_b.isChecked())
+                        resultValue=resultValue+"2;";
+
+                    if (cb_add_exam_c.isChecked())
+                        resultValue=resultValue+"3;";
+
+                    if (cb_add_exam_d.isChecked())
+                        resultValue=resultValue+"4;";
+
+                    mPresenter.addExam(et_add_exam_grade.getText().toString(),et_add_exam_title.getText().toString(),examType,resultValue,options);
+                }
                 break;
 
             case Constants.ExamType.EXAM_SHORT:
+                mPresenter.addExam(et_add_exam_grade.getText().toString(),et_add_exam_title.getText().toString(),examType,resultValue,options);
                 break;
 
         }
@@ -163,11 +192,59 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
             case R.id.rb_add_exam_true:
+                resultValue="true";
                 break;
 
             case R.id.rb_add_exam_false:
+                resultValue="false";
+                break;
+            case R.id.rb_add_exam_a:
+                resultValue="1";
+                break;
+            case R.id.rb_add_exam_b:
+                resultValue="2";
+                break;
+            case R.id.rb_add_exam_c:
+                resultValue="2";
+                break;
+            case R.id.rb_add_exam_d:
+                resultValue="3";
                 break;
 
         }
+    }
+
+
+    private boolean judgeOption(){
+        if (TextUtils.isEmpty(et_add_exam_a.getText().toString())){
+            showToast("选项不完整，请检查！");
+            return false;
+        }
+        options=options+et_add_exam_a.getText().toString()+";";
+        if (TextUtils.isEmpty(et_add_exam_b.getText().toString())){
+            showToast("选项不完整，请检查！");
+            return false;
+        }
+        options=options+et_add_exam_b.getText().toString()+";";
+        if (TextUtils.isEmpty(et_add_exam_c.getText().toString())){
+            showToast("选项不完整，请检查！");
+            return false;
+        }
+        options=options+et_add_exam_c.getText().toString()+";";
+        if (TextUtils.isEmpty(et_add_exam_d.getText().toString())){
+            showToast("选项不完整，请检查！");
+            return false;
+        }
+        options=options+et_add_exam_d.getText().toString()+";";
+        return true;
+    }
+
+
+    @Override
+    public void getSubject(Subject subject) {
+        Intent intent=new Intent();
+        intent.putExtra("subject",subject);
+        setResult(1,intent);
+        finish();
     }
 }

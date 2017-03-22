@@ -5,6 +5,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +18,14 @@ import android.widget.TimePicker;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IAddExaminationView;
+import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.presenter.AddExaminationPresenter;
 import com.example.francis.examinationsystem.util.TimeUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -143,11 +149,21 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                     return;
                 }
                 Intent intent=new Intent();
-                intent.putExtra("startDate",tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString());
-                intent.putExtra("endDate",tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString());
-                intent.putExtra("name",etExamTitle.getText().toString());
-                intent.putExtra("describe",etExamContent.getText().toString());
+                ExamPaper examPaper=new ExamPaper();
+                examPaper.setName(etExamTitle.getText().toString());
+                examPaper.setDes(etExamContent.getText().toString());
+
+                try {
+                    examPaper.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                            parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
+                    examPaper.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                            parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                intent.putExtra("examPaper",examPaper);
                 to(AddExamActivity.class,intent);
+                finish();
                 break;
         }
     }

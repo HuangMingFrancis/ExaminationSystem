@@ -1,13 +1,14 @@
 package com.example.francis.examinationsystem.entity;
 
 
+import java.io.Serializable;
 
 /**
  * 题目
  * Created by wzn on 2017/3/19.
  */
 
-public class Subject extends BaseObject{
+public class Subject extends BaseObject implements Serializable{
     private Long id;
     private String name;
     /**
