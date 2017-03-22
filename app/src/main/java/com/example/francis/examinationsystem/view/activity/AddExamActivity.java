@@ -216,7 +216,8 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.send) {
-            mPresenter.addSubjects(titles);
+//            mPresenter.addSubjects(titles);
+            mPresenter.addExamPager(examPaper,titles);
         }
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -240,7 +241,7 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
 
     @Override
     public void addSubjectsSuccess(List<Long> subjectIds) {
-        mPresenter.addExamPager(subjectIds,examPaper);
+//        mPresenter.addExamPager(subjectIds,examPaper);
     }
 
     @Override

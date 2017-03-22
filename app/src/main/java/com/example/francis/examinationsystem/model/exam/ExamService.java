@@ -9,6 +9,9 @@ import com.example.francis.examinationsystem.entity.bmob.DataResult;
 
 import org.json.JSONArray;
 
+import java.util.List;
+import java.util.Map;
+
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -16,6 +19,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -42,7 +46,7 @@ public interface ExamService {
      * @return
      */
     @POST("batch")
-    Observable<JSONArray> addSubjectList(@Body JSONArray lstSubjects);
+    Observable<List<Map<String,Object>>> addSubjectList(@Body Map<String,Object> lstSubjects);
 
     @POST("Subject")
     Observable<Subject> addSubject(@Body Subject subject);

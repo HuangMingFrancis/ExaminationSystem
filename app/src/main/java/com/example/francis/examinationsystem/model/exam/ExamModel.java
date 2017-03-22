@@ -5,12 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
+import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
+import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -29,8 +36,37 @@ public class ExamModel {
     }
 
 
-    public Observable<ExamPaper> addExamPaper(ExamPaper examPaper) {
-        return examService.addExamPaper(examPaper);
+    public Observable<ExamPaper> addExamPaper(final ExamPaper examPaper, List<Subject> lstSubjects) {
+        Map<String, Object> object = new HashMap<>();
+        List<Map<String, Object>> lstMap = new ArrayList<>();
+        for (Subject subject : lstSubjects) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("method", "POST");
+            map.put("path", "/1/classes/Subject");
+            map.put("body", subject);
+            lstMap.add(map);
+        }
+        object.put("requests", lstMap);
+
+
+        return RetrofitHelper.getRetrofit(Constants.Project.batchBaseUrl).create(ExamService.class)
+                .addSubjectList(object)
+                .flatMap(new Func1<List<Map<String, Object>>, Observable<ExamPaper>>() {
+                    @Override
+                    public Observable<ExamPaper> call(List<Map<String, Object>> lstMap) {
+                        for (int i = 0; i < lstMap.size(); i++) {
+                            Map<String, Object> object = lstMap.get(i);
+                            if (examPaper.getLstSubjectIds() == null) {
+                                examPaper.setLstSubjectIds(new ArrayList<String>());
+                            }
+                            examPaper.getLstSubjectIds().add((String) ((Map<String,Object>) object.get("success")).get("objectId"));
+                        }
+                        return examService.addExamPaper(examPaper);
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+
+
     }
 
     public Observable<ExamPaper> updateExamPaper(ExamPaper examPaper) {
@@ -66,8 +102,6 @@ public class ExamModel {
     }
 
     public Observable<List<Long>> addSubjectList(List<Subject> lstSubjects) {
-
-
         return null;
     }
 
@@ -102,7 +136,7 @@ public class ExamModel {
                 .flatMap(new Func1<SubjectType, Observable<SubjectType>>() {
                     @Override
                     public Observable<SubjectType> call(SubjectType subjectType) {
-                        if (subjectType!=null){
+                        if (subjectType != null) {
                             return Observable.just(subjectType);
                         }
                         return null;

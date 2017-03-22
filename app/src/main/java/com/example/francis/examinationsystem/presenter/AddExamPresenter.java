@@ -29,28 +29,10 @@ public class AddExamPresenter extends BasePresenter<IAddExamView> {
         subjectIds=new ArrayList<>();
     }
 
-    public void addSubjects(final List<Subject> subjects){
-        subjectIds.clear();
-        examModel.addSubjectList(subjects)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Long>>() {
-                    @Override
-                    public void call(List<Long> longs) {
-                        if (longs!=null){
-                            getView().addSubjectsSuccess(longs);
-                        }
-                    }
-                }, new BmobErrorAction() {
-                    @Override
-                    public void call(BmobErrorData errorData) {
-                        getView().showToast(errorData.getError());
-                    }
-                });
-    }
-    public void addExamPager(final List<Long> subjectIds,ExamPaper examPaper){
-        examPaper.setLstSubjectIds(subjectIds);
 
-        examModel.addExamPaper(examPaper)
+    public void addExamPager(ExamPaper examPaper,final List<Subject> subjects){
+
+        examModel.addExamPaper(examPaper,subjects)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ExamPaper>() {
                     @Override

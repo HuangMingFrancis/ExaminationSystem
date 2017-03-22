@@ -11,7 +11,7 @@ import java.util.List;
  * Created by wzn on 2017/3/19.
  */
 
-public class ExamPaper extends BaseObject implements Serializable{
+public class ExamPaper extends BaseObject implements Serializable {
     private Long id;
     private String name;
     private String des;
@@ -35,7 +35,7 @@ public class ExamPaper extends BaseObject implements Serializable{
     /**
      * 题目
      */
-    private List<Long> lstSubjectIds;
+    private List<String> lstSubjectIds;
     /**
      * 开始时间
      */
@@ -44,6 +44,7 @@ public class ExamPaper extends BaseObject implements Serializable{
      * 结束时间
      */
     private Date planEndDate;
+
 
 
     public Long getId() {
@@ -78,11 +79,11 @@ public class ExamPaper extends BaseObject implements Serializable{
         this.courseId = courseId;
     }
 
-    public List<Long> getLstSubjectIds() {
+    public List<String> getLstSubjectIds() {
         return lstSubjectIds;
     }
 
-    public void setLstSubjectIds(List<Long> lstSubjectIds) {
+    public void setLstSubjectIds(List<String> lstSubjectIds) {
         this.lstSubjectIds = lstSubjectIds;
     }
 

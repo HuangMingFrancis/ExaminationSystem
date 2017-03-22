@@ -43,6 +43,7 @@ public class Constants {
         public static final String baseUrl="https://api.bmob.cn/1/classes/";
 
         public static final String bqlBaseUrl="https://api.bmob.cn/1/cloudQuery/";
+        public static final String batchBaseUrl="https://api.bmob.cn/1/";
 
     }
 
