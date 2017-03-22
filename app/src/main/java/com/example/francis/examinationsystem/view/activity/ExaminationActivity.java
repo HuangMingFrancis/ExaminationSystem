@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -14,6 +15,7 @@ import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IExaminationView;
 import com.example.francis.examinationsystem.entity.ExamPaper;
+import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.presenter.ExaminationPresenter;
 import com.example.francis.examinationsystem.view.adapter.ExaminationAdapter;
 import com.shamanland.fab.FloatingActionButton;
@@ -24,6 +26,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.example.francis.examinationsystem.R.id.btn_course_tab_publish;
 
 /**
  * Created by Francis on 2017/3/21.
@@ -36,7 +40,7 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
     RecyclerView listExamination;
     @BindView(R.id.fresh_examination)
     SwipeRefreshLayout freshExamination;
-    @BindView(R.id.btn_course_tab_publish)
+    @BindView(btn_course_tab_publish)
     FloatingActionButton btnCourseTabPublish;
 
     List<ExamPaper> lstExamPapers;
@@ -65,21 +69,24 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void initData() {
-        lstExamPapers=new ArrayList<>();
-        LinearLayoutManager manager=new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
+        lstExamPapers = new ArrayList<>();
+        LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         listExamination.setLayoutManager(manager);
-        mExaminationAdapter= new ExaminationAdapter(android.R.layout.simple_list_item_1,lstExamPapers) ;
+        mExaminationAdapter = new ExaminationAdapter(lstExamPapers);
         listExamination.setAdapter(mExaminationAdapter);
     }
 
     @Override
     protected void initView() {
         setToolBar(toolbarMain, "考卷");
+        if (App.mUser.getType() == 1) {
+            btnCourseTabPublish.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void loadData() {
-        mPresenter.queryExamList(getIntent().getLongExtra("courseId",-1));
+        mPresenter.queryExamList(getIntent().getLongExtra("courseId", -1));
     }
 
     @Override
@@ -87,14 +94,14 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
         return new ExaminationPresenter();
     }
 
-    @OnClick(R.id.btn_course_tab_publish)
+    @OnClick(btn_course_tab_publish)
     public void onClick() {
-        toForResult(AddExaminatinoActivity.class,new Intent(),0);
+        toForResult(AddExaminatinoActivity.class, new Intent(), 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==0){
+        if (requestCode == 0) {
 
         }
         super.onActivityResult(requestCode, resultCode, data);

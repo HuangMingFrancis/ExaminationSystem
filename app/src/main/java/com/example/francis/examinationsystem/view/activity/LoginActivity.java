@@ -2,12 +2,17 @@ package com.example.francis.examinationsystem.view.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.francis.examinationsystem.R;
@@ -16,9 +21,14 @@ import com.example.francis.examinationsystem.contract.ILoginView;
 import com.example.francis.examinationsystem.presenter.LoginPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.example.francis.examinationsystem.R.id.btn_register;
 
 /**
  * Created by Francis on 2017-3-10.
@@ -117,6 +127,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
         final EditText et_register_name = (EditText) view.findViewById(R.id.et_register_name);
         final EditText et_register_password = (EditText) view.findViewById(R.id.et_register_password);
         final EditText et_register_school = (EditText) view.findViewById(R.id.et_register_school);
+        final Spinner spChooseType= (Spinner) view.findViewById(R.id.spChooseType);
         Button btn_register = (Button) view.findViewById(R.id.btn_register);
         Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
 
@@ -135,7 +146,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
                         !et_register_school.getText().toString().equals("") &&
                         !et_register_name.getText().toString().equals("")) {
                     mPresenter.register(et_register_account.getText().toString(), et_register_password.getText().toString()
-                            , et_register_name.getText().toString(), et_register_school.getText().toString(),0);
+                            , et_register_name.getText().toString(), et_register_school.getText().toString(),spChooseType.getSelectedItem().toString().equals("老师")?0:1);
 
                 } else {
                     showRegisterFailDialog();
@@ -143,6 +154,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
             }
         });
+
 
         RegisterDialog.setView(view);
         RegisterDialog.show();

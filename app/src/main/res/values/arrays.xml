@@ -13,4 +13,9 @@
         <item>公告</item>
         <item>测试</item>
     </array>
+
+    <array name="user_type">
+        <item>学生</item>
+        <item>老师</item>
+    </array>
 </resources>

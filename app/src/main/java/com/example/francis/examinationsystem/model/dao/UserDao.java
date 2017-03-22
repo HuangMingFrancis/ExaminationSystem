@@ -31,7 +31,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property UserHead = new Property(4, String.class, "userHead", false, "USER_HEAD");
         public final static Property UserEmail = new Property(5, String.class, "userEmail", false, "USER_EMAIL");
         public final static Property School = new Property(6, String.class, "school", false, "SCHOOL");
-        public final static Property Type = new Property(7, int.class, "type", false, "TYPE");
+        public final static Property Type = new Property(7, Integer.class, "type", false, "TYPE");
     }
 
 
@@ -54,7 +54,7 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"USER_HEAD\" TEXT," + // 4: userHead
                 "\"USER_EMAIL\" TEXT," + // 5: userEmail
                 "\"SCHOOL\" TEXT," + // 6: school
-                "\"TYPE\" INTEGER NOT NULL );"); // 7: type
+                "\"TYPE\" INTEGER);"); // 7: type
     }
 
     /** Drops the underlying database table. */
@@ -101,7 +101,11 @@ public class UserDao extends AbstractDao<User, Long> {
         if (school != null) {
             stmt.bindString(7, school);
         }
-        stmt.bindLong(8, entity.getType());
+ 
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(8, type);
+        }
     }
 
     @Override
@@ -142,7 +146,11 @@ public class UserDao extends AbstractDao<User, Long> {
         if (school != null) {
             stmt.bindString(7, school);
         }
-        stmt.bindLong(8, entity.getType());
+ 
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(8, type);
+        }
     }
 
     @Override
@@ -160,7 +168,7 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // userHead
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // userEmail
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // school
-            cursor.getInt(offset + 7) // type
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // type
         );
         return entity;
     }
@@ -174,7 +182,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setUserHead(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setUserEmail(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setSchool(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setType(cursor.getInt(offset + 7));
+        entity.setType(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
      }
     
     @Override

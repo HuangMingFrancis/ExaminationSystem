@@ -162,10 +162,15 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
         //设置事件监听
         mAddDialog.setOnDismissListener(this);
 
-
-        dialogTitle.setText("新建班级");
-        dialogCourse.setHint("请输入新建班级名称");
-        btnCreate.setText("创建");
+        if (App.mUser.getType() == 0) {
+            dialogTitle.setText("新建班级");
+            dialogCourse.setHint("请输入新建班级名称");
+            btnCreate.setText("创建");
+        } else {
+            dialogTitle.setText("加入班级");
+            dialogCourse.setHint("请输入班级名称");
+            btnCreate.setText("加入");
+        }
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -179,8 +184,12 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
             public void onClick(View v) {
                 if (NetUtils.isConnected()) {
                     Course course = new Course();
-                    course.setName(dialogCourse.getText().toString());
-                    course.setTeacherId(App.mUser.getId());
+                    if (App.mUser.getType() == 0) {
+                        course.setName(dialogCourse.getText().toString());
+                        course.setTeacherId(App.mUser.getId());
+                    }else{
+                        course.setName(dialogCourse.getText().toString());
+                    }
                     mPresenter.addCourse(course);
                 } else {
                     showToast("没有网络连接");

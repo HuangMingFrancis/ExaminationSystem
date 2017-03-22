@@ -7,6 +7,7 @@ import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,20 +57,31 @@ public class CourseModel {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Course> joinCourse(final String objectId, final Long studentId) {
+    public Observable<Course> joinCourse(String courseName, final Long studentId) {
         Course course = new Course();
-        course.setObjectId(objectId);
+        course.setName(courseName);
         return queryCourse(course)
                 .flatMap(new Func1<Course, Observable<Course>>() {
                     @Override
-                    public Observable<Course> call(Course course) {
+                    public Observable<Course> call(final Course course) {
                         Course newCourse = new Course();
-                        newCourse.setLstStudents(course.getLstStudents());
+                        if (course.getLstStudents() == null) {
+                            course.setLstStudents(new ArrayList<Long>());
+                        }
                         course.getLstStudents().add(studentId);
-                        return courseService.updateCourse(objectId, course);
+                        newCourse.setLstStudents(course.getLstStudents());
+                        return courseService.updateCourse(course.getObjectId(), newCourse)
+                                .flatMap(new Func1<Course, Observable<Course>>() {
+                                    @Override
+                                    public Observable<Course> call(Course updateCourse) {
+                                        return Observable.just(course);
+                                    }
+                                });
+
                     }
                 })
                 .subscribeOn(Schedulers.io());
+
 
     }
 
@@ -93,9 +105,9 @@ public class CourseModel {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<List<Course>> queryCourseListByCourseName(String bql,List<Object> conditons) {
+    public Observable<List<Course>> queryCourseListByCourseName(String bql, List<Object> conditons) {
         return RetrofitHelper.getRetrofit(Constants.Project.bqlBaseUrl).create(CourseService.class)
-                .queryCourseListByCourseName(Constants.Project.bqlBaseUrl,bql, JSONArray.toJSONString(conditons))
+                .queryCourseListByCourseName(Constants.Project.bqlBaseUrl, bql, JSONArray.toJSONString(conditons))
                 .flatMap(new Func1<DataResult<Course>, Observable<List<Course>>>() {
                     @Override
                     public Observable<List<Course>> call(final DataResult<Course> dataResult) {

@@ -6,6 +6,8 @@ import org.greenrobot.greendao.annotation.Id;
 
 import cn.bmob.v3.BmobObject;
 
+import static android.R.attr.type;
+
 /**
  * Created by Francis on 2017-3-10.
  */
@@ -20,11 +22,11 @@ public class User extends BaseObject {
     private String userHead;//头像
     private String userEmail;//邮箱
     private String school;//学校
-    private int type;//类别（0为老师，1为学生）
+    private Integer type;//类别（0为老师，1为学生）
 
-    @Generated(hash = 630143531)
+    @Generated(hash = 1372348665)
     public User(Long id, String userAccount, String userPsw, String userName,
-            String userHead, String userEmail, String school, int type) {
+            String userHead, String userEmail, String school, Integer type) {
         this.id = id;
         this.userAccount = userAccount;
         this.userPsw = userPsw;
@@ -95,11 +97,11 @@ public class User extends BaseObject {
         this.school = school;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 }

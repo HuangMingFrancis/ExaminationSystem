@@ -5,13 +5,12 @@
               android:orientation="vertical"
               android:padding="10dp">
 
-    <TextView
+    <Spinner
+        android:entries="@array/user_type"
+        android:id="@+id/spChooseType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="老师"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
