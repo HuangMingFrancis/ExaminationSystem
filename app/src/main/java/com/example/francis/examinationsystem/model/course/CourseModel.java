@@ -1,5 +1,7 @@
 package com.example.francis.examinationsystem.model.course;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
@@ -95,7 +97,9 @@ public class CourseModel {
                 .flatMap(new Func1<JSONObject, Observable<Boolean>>() {
                     @Override
                     public Observable<Boolean> call(final JSONObject jsonObject) {
+                        Log.i("http", "delete: " + jsonObject.toString());
                         if (jsonObject.get("msg").equals("ok")) {
+                            Log.i("http", "delete: " + "ok");
                             return Observable.just(true);
                         } else {
                             return Observable.just(false);

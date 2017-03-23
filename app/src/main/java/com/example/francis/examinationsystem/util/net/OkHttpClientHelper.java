@@ -26,5 +26,14 @@ class OkHttpClientHelper {
         return client;
     }
 
+    public  static OkHttpClient getClient(String contentType) {
+        return new OkHttpClient.Builder()
+                    .addInterceptor(new TestInterceptor(contentType))
+                    .addInterceptor(new HttpLoggingInterceptor())
+                    .connectTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
+                    .readTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
+                    .writeTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
+                    .build();
+    }
 
 }

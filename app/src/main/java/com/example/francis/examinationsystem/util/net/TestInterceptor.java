@@ -15,14 +15,14 @@ import okhttp3.Response;
  * 添加header拦截器
  */
 
-public class HeaderInterceptor implements Interceptor {
+public class TestInterceptor implements Interceptor {
     private String contentType;
 
-    public HeaderInterceptor() {
-        contentType="application/json";
+    public TestInterceptor() {
+        contentType="application/x-jpg";
     }
 
-    public HeaderInterceptor(String contentType) {
+    public TestInterceptor(String contentType) {
         this.contentType = contentType;
     }
 

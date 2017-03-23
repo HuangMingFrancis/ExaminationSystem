@@ -1,13 +1,10 @@
 package com.example.francis.examinationsystem.model.exam;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
 import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
-
-import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +16,6 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -31,10 +27,10 @@ public interface ExamService {
     Observable<ExamPaper> addExamPaper(@Body ExamPaper examPaper);
 
     @PUT("ExamPaper/{objectId}")
-    Observable<ExamPaper> updateExamPaper(@Path("objectId") String objectId, @Body ExamPaper examPaper);
+    Observable<JSONObject> updateExamPaper(@Path("objectId") String objectId, @Body Map<String,Object> lstSubjects);
 
-    @DELETE("ExamPaper")
-    Observable<JSONObject> deleteExamPaper(@Query("objectId") String objectId);
+    @DELETE("ExamPaper/{objectId}")
+    Observable<JSONObject> deleteExamPaper(@Path("objectId") String objectId);
 
     @GET("ExamPaper")
     Observable<DataResult<ExamPaper>> queryExamPaperList(@Query("where") String where);

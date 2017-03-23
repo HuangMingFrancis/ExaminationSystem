@@ -24,15 +24,14 @@ import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IMainView;
 import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.global.Constants;
-import com.example.francis.examinationsystem.presenter.ClassRoomPresenter;
 import com.example.francis.examinationsystem.presenter.MainPresent;
 import com.example.francis.examinationsystem.util.Toaster;
+import com.example.francis.examinationsystem.util.sp.ProjectSPUtils;
 import com.example.francis.examinationsystem.view.fragment.ClassRoomFragment;
 import com.example.francis.examinationsystem.view.fragment.ContactsFragment;
 import com.example.francis.examinationsystem.view.fragment.MessageFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends MVPBaseActivity<IMainView, MainPresent> implements IMainView{
@@ -189,6 +188,7 @@ public class MainActivity extends MVPBaseActivity<IMainView, MainPresent> implem
         }).setNegativeButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ProjectSPUtils.setIsLogin(false);
                 startActivity(new Intent(mContext, LoginActivity.class));
                 finish();
             }

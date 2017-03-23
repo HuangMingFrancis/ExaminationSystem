@@ -11,6 +11,7 @@ import com.example.francis.examinationsystem.model.login.LoginByDB;
 import com.example.francis.examinationsystem.model.login.LoginByHttpModel;
 import com.example.francis.examinationsystem.model.user.UserModel;
 import com.example.francis.examinationsystem.util.net.BmobErrorAction;
+import com.example.francis.examinationsystem.util.sp.ProjectSPUtils;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -57,6 +58,8 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                         if (user != null) {
                             App.mUser = user;
                             getView().loginSuccess();
+                            ProjectSPUtils.setIsLogin(true);
+                            ProjectSPUtils.setLoginUser(user);
                         } else {
                             getView().showToast("账号或密码错误");
                         }
@@ -66,6 +69,8 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                     public void call(BmobErrorData errorData) {
                         getView().hideLoading();
                         getView().showToast(errorData.getError());
+                        ProjectSPUtils.setIsLogin(false);
+
                     }
                 });
 
@@ -95,5 +100,12 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                         getView().showToast(errorData.getError());
                     }
                 });
+    }
+
+
+    public void judgeLoginState(){
+        if (ProjectSPUtils.getIsLogin(false)){
+            getView().login(ProjectSPUtils.getLoginUser());
+        }
     }
 }

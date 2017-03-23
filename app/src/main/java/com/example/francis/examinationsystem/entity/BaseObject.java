@@ -1,11 +1,13 @@
 package com.example.francis.examinationsystem.entity;
 
 
+import java.io.Serializable;
+
 /**
  * Created by wzn on 2017/3/21.
  */
 
-public class BaseObject  {
+public class BaseObject  implements Serializable{
     private String objectId;
     private String createdAt;
     private String updatedAt;

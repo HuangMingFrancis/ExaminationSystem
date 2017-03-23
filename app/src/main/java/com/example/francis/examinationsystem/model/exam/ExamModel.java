@@ -1,18 +1,12 @@
 package com.example.francis.examinationsystem.model.exam;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
-import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.global.Constants;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
-
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -66,11 +59,14 @@ public class ExamModel {
                 })
                 .subscribeOn(Schedulers.io());
 
-
     }
 
-    public Observable<ExamPaper> updateExamPaper(ExamPaper examPaper) {
-        return examService.updateExamPaper(examPaper.getObjectId(), examPaper);
+    public Observable<JSONObject> updateExamPaper(ExamPaper examPaper) {
+        Map<String ,Object> examMap=new HashMap<>();
+        examMap.put("name",examPaper.getName());
+        examMap.put("des",examPaper.getDes());
+        return examService.updateExamPaper(examPaper.getObjectId(), examMap)
+                .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> deleteExamPaper(String objectId) {

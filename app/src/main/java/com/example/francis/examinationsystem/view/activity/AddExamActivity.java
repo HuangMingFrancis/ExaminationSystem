@@ -1,7 +1,6 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -248,7 +246,7 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
     public void addExamPaperSuccess(ExamPaper examPaper) {
 //        Intent intent=new Intent();
 //        intent.putExtra("examPaper",examPaper);
-        to(ExaminationActivity.class,new Intent());
+//        to(ExaminationActivity.class,new Intent());
         finish();
     }
 }

@@ -10,4 +10,5 @@ import com.example.francis.examinationsystem.entity.User;
 public interface ILoginView extends IBaseView{
     void loginSuccess();
     void registerSuccess(String userName);
+    void login(User user);
 }

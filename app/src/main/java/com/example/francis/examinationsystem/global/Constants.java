@@ -29,6 +29,10 @@ public class Constants {
         public static final String SF_KEY_LOGIN_STATUS = "login";// 已登录状态
         public static final String SF_KEY_FIRST_LOGIN = "first_login";
 
+        public static final String SF_KEY_LOGIN_USER = "login_user";
+
+
+
     }
 
     // 工程相关常量
@@ -59,7 +63,7 @@ public class Constants {
     public static class Fold {
         public final static String MAIN_FOLDER = "examination_system" + File.separator;
         public final static String DATA_FOLDER = "data" + File.separator;
-        public static final String ALBUM_PATH = Environment.getExternalStorageDirectory() + File.separator + MAIN_FOLDER + File.separator;
+        public static final String ALBUM_PATH = Environment.getExternalStorageDirectory() + File.separator + MAIN_FOLDER ;
         public final static String PHOTO_FOLDER = ALBUM_PATH + "photo" + File.separator;
     }
 

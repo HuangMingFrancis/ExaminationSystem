@@ -2,7 +2,6 @@ package com.example.francis.examinationsystem.presenter;
 
 import com.example.francis.examinationsystem.base.BasePresenter;
 import com.example.francis.examinationsystem.contract.IFlashView;
-import com.example.francis.examinationsystem.util.sp.ProjectSPUtils;
 
 /**
  * Created by Francis on 2017-3-15.
@@ -16,8 +15,8 @@ public class FlashPresenter extends BasePresenter<IFlashView> {
      * 判断跳转到哪个Activity
      */
     public void judgeJumpActivity(){
-        isFirstIn=ProjectSPUtils.getIsFirstLogin();
-        isLogin=ProjectSPUtils.getIsLogin(false);
+//        isFirstIn=ProjectSPUtils.getIsFirstLogin();
+//        isLogin=ProjectSPUtils.getIsLogin(false);
 
 //        if (!isFirstIn){
 //            ProjectSPUtils.setIsFirstLogin(true);
@@ -25,12 +24,14 @@ public class FlashPresenter extends BasePresenter<IFlashView> {
 //            return;
 //        }
 //        if (isFirstIn){
-            if (!isLogin){
-                getView().goLoginActivity();
-            }else {
-                getView().goMainActivity();
-            }
+//            if (!isLogin){
+//                getView().goLoginActivity();
+//            }else {
+//                getView().goMainActivity();
+//            }
 //        }
+
+        getView().goLoginActivity();
     }
 
 }

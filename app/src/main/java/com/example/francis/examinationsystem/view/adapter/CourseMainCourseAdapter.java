@@ -19,5 +19,10 @@ public class CourseMainCourseAdapter extends BaseQuickAdapter<Course, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, Course course) {
         helper.setText(R.id.tv_item_courseName,course.getName());
+        if (course.getLstStudents()!=null){
+            helper.setText(R.id.tv_item_StudentCount,"参与学生: "+course.getLstStudents().size()+"人");
+        }
+
+        helper.addOnClickListener(R.id.img_item_courseMore);
     }
 }

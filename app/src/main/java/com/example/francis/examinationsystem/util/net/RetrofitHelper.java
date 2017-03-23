@@ -6,8 +6,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.francis.examinationsystem.global.Constants.Project.baseUrl;
-
 /**
  * Created by wzn on 2017/3/21.
  */
@@ -39,6 +37,5 @@ public class RetrofitHelper {
                 .baseUrl(url)
                 .build();
     }
-
 
 }

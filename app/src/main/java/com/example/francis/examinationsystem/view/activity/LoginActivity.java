@@ -2,33 +2,23 @@ package com.example.francis.examinationsystem.view.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.ILoginView;
+import com.example.francis.examinationsystem.entity.User;
 import com.example.francis.examinationsystem.presenter.LoginPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.example.francis.examinationsystem.R.id.btn_register;
 
 /**
  * Created by Francis on 2017-3-10.
@@ -68,7 +58,7 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
     @Override
     protected void loadData() {
-
+        mPresenter.judgeLoginState();
     }
 
     @Override
@@ -86,6 +76,13 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
     public void registerSuccess(String userName) {
         etLoginName.setText(userName);
         RegisterDialog.hide();
+    }
+
+    @Override
+    public void login(User user) {
+        etLoginName.setText(user.getUserName());
+        etLoginPassword.setText(user.getUserPsw());
+        mPresenter.login(user.getUserName(),user.getUserPsw());
     }
 
     @Override

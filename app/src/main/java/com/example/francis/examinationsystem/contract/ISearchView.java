@@ -12,4 +12,5 @@ import java.util.List;
 public interface ISearchView extends IBaseView {
 
     void getSearchCourseList(List<Course> searchCourseList);
+    void deleteCourseSuccess(Course course);
 }

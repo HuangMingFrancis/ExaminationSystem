@@ -1,16 +1,15 @@
 package com.example.francis.examinationsystem.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.francis.examinationsystem.R;
 import com.example.francis.examinationsystem.base.MVPBaseActivity;
 import com.example.francis.examinationsystem.contract.IExaminationView;
@@ -18,13 +17,13 @@ import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.presenter.ExaminationPresenter;
 import com.example.francis.examinationsystem.view.adapter.ExaminationAdapter;
+import com.example.francis.examinationsystem.view.thirty.MyPopupMenu;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.francis.examinationsystem.R.id.btn_course_tab_publish;
@@ -33,7 +32,8 @@ import static com.example.francis.examinationsystem.R.id.btn_course_tab_publish;
  * Created by Francis on 2017/3/21.
  */
 
-public class ExaminationActivity extends MVPBaseActivity<IExaminationView, ExaminationPresenter> implements IExaminationView {
+public class ExaminationActivity extends MVPBaseActivity<IExaminationView, ExaminationPresenter> implements IExaminationView
+    ,BaseQuickAdapter.OnItemChildClickListener,SwipeRefreshLayout.OnRefreshListener{
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
     @BindView(R.id.list_examination)
@@ -46,6 +46,9 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
     List<ExamPaper> lstExamPapers;
     ExaminationAdapter mExaminationAdapter;
 
+    private Long courseId;
+
+    private MyPopupMenu editExamPopup;
 
     @Override
     public void showToast(String message) {
@@ -69,6 +72,11 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void initData() {
+
+        if (getIntent()!=null){
+            courseId=getIntent().getLongExtra("courseId",-1);
+        }
+
         lstExamPapers = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         listExamination.setLayoutManager(manager);
@@ -82,6 +90,10 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
                 return false;
             }
         });
+
+        mExaminationAdapter.setOnItemChildClickListener(this);
+
+        freshExamination.setOnRefreshListener(this);
     }
 
     @Override
@@ -94,7 +106,7 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void loadData() {
-        mPresenter.queryExamList(getIntent().getLongExtra("courseId", -1));
+//        mPresenter.queryExamList(courseId);
     }
 
     @Override
@@ -104,7 +116,9 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @OnClick(btn_course_tab_publish)
     public void onClick() {
-        toForResult(AddExaminatinoActivity.class, new Intent(), 0);
+        Intent intent =new Intent();
+        intent.putExtra("courseId",courseId);
+        toForResult(AddExaminatinoActivity.class, intent, 0);
     }
 
     @Override
@@ -117,8 +131,6 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
@@ -128,13 +140,59 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     public void loadExamListComplete(List<ExamPaper> lstExamPapers) {
+        if (freshExamination.isRefreshing()){
+            freshExamination.setRefreshing(false);
+        }
+        this.lstExamPapers.clear();
         this.lstExamPapers.addAll(lstExamPapers);
         mExaminationAdapter.notifyDataSetChanged();
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        loadData();
+    public void deleteExamPaperSuccess(ExamPaper examPaper) {
+        lstExamPapers.remove(examPaper);
+        mExaminationAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.queryExamList(courseId);
+    }
+
+    @Override
+    public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()){
+            case R.id.img_t_exam_edit:
+                initPopupMenu(view,position);
+                break;
+        }
+        return false;
+    }
+
+    private void initPopupMenu(View view, final int position) {
+        editExamPopup=new MyPopupMenu(mContext,view,R.menu.exampaper_edit_menu);
+        editExamPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.item_menu_edit:
+                        Intent intent=new Intent();
+                        intent.putExtra("examPaper",lstExamPapers.get(position));
+                        to(AddExaminatinoActivity.class,intent);
+                        break;
+                    case R.id.item_menu_delete:
+                        mPresenter.deleteExamPaper(lstExamPapers.get(position));
+                        break;
+                }
+                return false;
+            }
+        });
+        editExamPopup.show();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.queryExamList(courseId);
     }
 }

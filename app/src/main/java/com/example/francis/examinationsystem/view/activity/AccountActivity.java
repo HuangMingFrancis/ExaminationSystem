@@ -87,6 +87,7 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
             tvAccount.setText(App.mUser.getUserAccount());
             tvName.setText(App.mUser.getUserName());
             tvSchool.setText(App.mUser.getSchool());
+            account=App.mUser.getUserAccount();
         }
     }
 
@@ -163,15 +164,17 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
                 InputStream is = mContext.getContentResolver().openInputStream(uri);
                 bitmap = BitmapFactory.decodeStream(is);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
             ImageLoaderUtils.displayNoDisk(mContext, imgAccountUser, Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
+            File file = new File(Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
+            mPresenter.updataeUserHead(account+"logo.jpg",file,Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
         }
         if (requestCode == IntentUtils.CAMERA_REQUEST && resultCode == RESULT_OK) {
             File file = new File(File_Path);
             ImageLoaderUtils.display(mContext, imgAccountUser, file.getPath());
+            mPresenter.updataeUserHead(account + "logo.jpg",file,file.getPath());
         }
     }
 

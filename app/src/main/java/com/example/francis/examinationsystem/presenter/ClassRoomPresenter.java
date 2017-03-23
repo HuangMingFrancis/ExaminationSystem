@@ -11,7 +11,6 @@ import com.example.francis.examinationsystem.util.net.BmobErrorAction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -103,4 +102,26 @@ public class ClassRoomPresenter extends BasePresenter<IClassRoomView> {
                     }
                 });
     }
+
+    public void deleteCourse(final Course course){
+        getView().showLoading();
+        courseModel.deleteCourse(course.getObjectId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        getView().hideLoading();
+                        if (aBoolean){
+                            getView().deleteCourseSuccess(course);
+                        }
+                    }
+                }, new BmobErrorAction() {
+                    @Override
+                    public void call(BmobErrorData errorData) {
+                        getView().hideLoading();
+                        getView().showToast(errorData.getError());
+                    }
+                });
+    }
+
 }

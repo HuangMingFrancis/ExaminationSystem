@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.francis.examinationsystem.R;
@@ -23,6 +25,7 @@ import com.example.francis.examinationsystem.presenter.SearchPresenter;
 import com.example.francis.examinationsystem.util.Toaster;
 import com.example.francis.examinationsystem.view.adapter.CourseMainCourseAdapter;
 import com.example.francis.examinationsystem.view.adapter.SearchTabPagerAdapter;
+import com.example.francis.examinationsystem.view.thirty.MyPopupMenu;
 import com.example.francis.examinationsystem.view.thirty.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -52,6 +55,8 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
 
     private List<Course> searchCourse;
     private BaseQuickAdapter searchAdapter;
+
+    private MyPopupMenu mCourseEditPopupMenu;
 
     @Override
     public void showToast(String message) {
@@ -117,6 +122,41 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
             }
         });
 
+        searchAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()){
+                    case R.id.img_item_courseMore:
+                        initEditPopMenu(view,position);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        freshSearchCourse.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.searchExam(etSearchText.getText().toString());
+            }
+        });
+
+    }
+
+    private void initEditPopMenu(View view, final int position){
+        mCourseEditPopupMenu = new MyPopupMenu(mContext, view, R.menu.teacher_courese_edit_menu);
+        mCourseEditPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_menu_delete:
+                        mPresenter.deleteCourse(searchCourse.get(position));
+                        break;
+                }
+                return true;
+            }
+        });
+        mCourseEditPopupMenu.show();
     }
 
     @Override
@@ -155,10 +195,19 @@ public class SearchActivity extends MVPBaseActivity<ISearchView, SearchPresenter
 
     @Override
     public void getSearchCourseList(List<Course> searchCourseList) {
+        if (freshSearchCourse.isRefreshing()){
+            freshSearchCourse.setRefreshing(false);
+        }
         if (searchCourseList!=null){
             searchCourse.clear();
             searchCourse.addAll(searchCourseList);
             searchAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void deleteCourseSuccess(Course course) {
+        searchCourse.remove(course);
+        searchAdapter.notifyDataSetChanged();
     }
 }

@@ -41,4 +41,26 @@ public class ExaminationPresenter extends BasePresenter<IExaminationView> {
                     }
                 });
     }
+
+
+    public void deleteExamPaper(final ExamPaper examPaper){
+        getView().showLoading();
+        examModel.deleteExamPaper(examPaper.getObjectId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        getView().hideLoading();
+                        if (aBoolean){
+                            getView().deleteExamPaperSuccess(examPaper);
+                        }
+                    }
+                }, new BmobErrorAction() {
+                    @Override
+                    public void call(BmobErrorData errorData) {
+                        getView().hideLoading();
+                        getView().showToast(errorData.getError());
+                    }
+                });
+    }
 }

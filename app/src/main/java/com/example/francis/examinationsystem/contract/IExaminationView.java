@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface IExaminationView extends IBaseView{
     void loadExamListComplete(List<ExamPaper> lstExamPapers);
+
+    void deleteExamPaperSuccess(ExamPaper examPaper);
 }

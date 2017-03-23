@@ -9,9 +9,7 @@ import com.example.francis.examinationsystem.model.course.CourseModel;
 import com.example.francis.examinationsystem.util.net.BmobErrorAction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -60,10 +58,10 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
 //        }else{
 ////            conditions.put("");
 //        }
-        String hql="select * from Course where teacherId=? and name like ?";
+        String hql="select * from Course where teacherId=? and name like %?%";
         List<Object> conditions=new ArrayList<>();
-        conditions.add(7);
-        conditions.add("‘%"+courseName+"%’");
+        conditions.add(App.mUser.getId());
+        conditions.add(courseName);
         courseModel.queryCourseListByCourseName(hql,conditions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Course>>() {
@@ -77,6 +75,27 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
 //                        }
 //                        getView().getSearchCourseList(courses1);
                         getView().getSearchCourseList(courses);
+                    }
+                }, new BmobErrorAction() {
+                    @Override
+                    public void call(BmobErrorData errorData) {
+                        getView().hideLoading();
+                        getView().showToast(errorData.getError());
+                    }
+                });
+    }
+
+    public void deleteCourse(final Course course){
+        getView().showLoading();
+        courseModel.deleteCourse(course.getObjectId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        getView().hideLoading();
+                        if (aBoolean){
+                            getView().deleteCourseSuccess(course);
+                        }
                     }
                 }, new BmobErrorAction() {
                     @Override

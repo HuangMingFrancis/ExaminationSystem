@@ -2,17 +2,18 @@ package com.example.francis.examinationsystem.view.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,8 +24,10 @@ import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.presenter.ClassRoomPresenter;
 import com.example.francis.examinationsystem.util.NetUtils;
+import com.example.francis.examinationsystem.util.Toaster;
 import com.example.francis.examinationsystem.view.activity.ExaminationActivity;
 import com.example.francis.examinationsystem.view.adapter.CourseMainCourseAdapter;
+import com.example.francis.examinationsystem.view.thirty.MyPopupMenu;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -58,6 +61,8 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
     private List<Course> mCourses;
 
+    private MyPopupMenu mCourseEditPopupMenu;
+
     @Override
     protected ClassRoomPresenter createPresenter() {
         return new ClassRoomPresenter();
@@ -70,8 +75,8 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
     @Override
     public void showToast(String message) {
-//        Toaster.showShort(message);
-        Snackbar.make(btnMainAdd, message, Snackbar.LENGTH_SHORT);
+        Toaster.showShort(message);
+//        Snackbar.make(btnMainAdd, message, Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -117,7 +122,44 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
                 startActivity(intent);
             }
         });
+
+        mMainCourseAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()){
+                    case R.id.img_item_courseMore:
+                        initEditPopMenu(view,position);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        freshMainCourse.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.queryCourseList();
+            }
+        });
     }
+
+
+    private void initEditPopMenu(View view, final int position){
+        mCourseEditPopupMenu = new MyPopupMenu(mContext, view, R.menu.teacher_courese_edit_menu);
+        mCourseEditPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_menu_delete:
+                        mPresenter.deleteCourse(mCourses.get(position));
+                        break;
+                }
+                return true;
+            }
+        });
+        mCourseEditPopupMenu.show();
+    }
+
 
     private void initAdapter() {
         mCourses = new ArrayList<>();
@@ -221,7 +263,17 @@ public class ClassRoomFragment extends BasePresenterFragment<IClassRoomView, Cla
 
     @Override
     public void loadCourseListComplete(List<Course> lstCourse) {
+        if (freshMainCourse.isRefreshing()){
+            freshMainCourse.setRefreshing(false);
+        }
+        mCourses.clear();
         mCourses.addAll(lstCourse);
+        mMainCourseAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteCourseSuccess(Course course) {
+        mCourses.remove(course);
         mMainCourseAdapter.notifyDataSetChanged();
     }
 }

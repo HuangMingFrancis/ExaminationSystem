@@ -1,6 +1,5 @@
 package com.example.francis.examinationsystem.model.course;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.Course;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
 
@@ -30,8 +29,8 @@ public interface CourseService {
     @PUT("Course/{objectId}")
     Observable<Course> updateCourse(@Path("objectId") String objectId, @Body Course course);
 
-    @DELETE("Course")
-    Observable<JSONObject> deleteCourse(@Query("objectId") String objectId);
+    @DELETE("Course/{objectId}")
+    Observable<com.alibaba.fastjson.JSONObject> deleteCourse(@Path("objectId") String objectId);
 
     @GET
     Observable<DataResult<Course>> queryCourseListByCourseName(@Url String url,@Query("bql") String bql, @Query("values") String values);

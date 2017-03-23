@@ -12,4 +12,5 @@ import java.util.List;
 public interface IClassRoomView extends IBaseView {
     void addCourseSuccess(Course course);
     void loadCourseListComplete(List<Course> lstCourse);
+    void deleteCourseSuccess(Course course);
 }

@@ -5,8 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +19,11 @@ import com.example.francis.examinationsystem.contract.IAddExaminationView;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.presenter.AddExaminationPresenter;
 import com.example.francis.examinationsystem.util.TimeUtils;
+import com.example.francis.examinationsystem.util.Toaster;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -64,9 +62,17 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
 
     private Calendar mCalendar;
 
+    private Long courseId;
+
+    //编辑跳转过来会转一个examPaper
+    private ExamPaper examPaperEdit;
+
+    //examPaper状态 0: 新增  1:编辑
+    private int examPaperState=0;
+
     @Override
     public void showToast(String message) {
-
+        Toaster.showShort(message);
     }
 
     @Override
@@ -102,6 +108,18 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
         tvAddExamStartTime.setText(TimeUtils.getCurrentTimeFormat(mCalendar));
         tvAddExamEndDate.setText(TimeUtils.getCurrentDateFormat(mCalendar));
         tvAddExamEndTime.setText(TimeUtils.getCurrentTimeFormat(mCalendar));
+
+        if (getIntent()!=null){
+            courseId=getIntent().getLongExtra("courseId",-1);
+            examPaperEdit= (ExamPaper) getIntent().getSerializableExtra("examPaper");
+            if (examPaperEdit!=null){
+                examPaperState=1;
+                etExamTitle.setText(examPaperEdit.getName());
+                etExamContent.setText(examPaperEdit.getDes());
+            }else {
+                examPaperState=0;
+            }
+        }
     }
 
     @Override
@@ -148,22 +166,37 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                     showToast("测试简介不能为空");
                     return;
                 }
-                Intent intent=new Intent();
-                ExamPaper examPaper=new ExamPaper();
-                examPaper.setName(etExamTitle.getText().toString());
-                examPaper.setDes(etExamContent.getText().toString());
-
-                try {
-                    examPaper.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                            parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
-                    examPaper.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                            parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (examPaperState==0){
+                    Intent intent=new Intent();
+                    ExamPaper examPaper=new ExamPaper();
+                    examPaper.setName(etExamTitle.getText().toString());
+                    examPaper.setDes(etExamContent.getText().toString());
+                    examPaper.setCourseId(courseId);
+                    try {
+                        examPaper.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                                parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
+                        examPaper.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                                parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra("examPaper",examPaper);
+                    to(AddExamActivity.class,intent);
+                    finish();
+                }else if (examPaperState==1){
+                    examPaperEdit.setName(etExamTitle.getText().toString());
+                    examPaperEdit.setDes(etExamContent.getText().toString());
+                    try {
+                        examPaperEdit.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                                parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
+                        examPaperEdit.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                                parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    mPresenter.editExamPaper(examPaperEdit);
                 }
-                intent.putExtra("examPaper",examPaper);
-                to(AddExamActivity.class,intent);
-                finish();
+
                 break;
         }
     }
@@ -225,5 +258,10 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void editExamPaperSuccess() {
+        finish();
     }
 }
