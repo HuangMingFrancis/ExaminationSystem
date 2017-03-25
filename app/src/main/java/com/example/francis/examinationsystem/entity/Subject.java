@@ -32,6 +32,20 @@ public class Subject extends BaseObject implements Serializable{
      */
     private String options;
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    /**
+     * 判断是否选择，默认是false
+
+     */
+    private boolean isChecked=false;
+
     public Long getId() {
         return id;
     }
