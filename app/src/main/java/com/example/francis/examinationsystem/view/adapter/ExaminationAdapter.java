@@ -33,10 +33,9 @@ public class ExaminationAdapter extends BaseQuickAdapter<ExamPaper, BaseViewHold
         View view=null;
         if (viewType == 0) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_course_exam, parent, false);
+        } else {
+            view = LayoutInflater.from(mContext).inflate(R.layout.item_student_exam_paper, parent, false);
         }
-//        else {
-//            view = LayoutInflater.from(mContext).inflate(R.layout.item_student_exam_paper, parent, false);
-//        }
         return new BaseViewHolder(view);
     }
 

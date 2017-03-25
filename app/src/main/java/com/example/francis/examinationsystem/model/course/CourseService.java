@@ -18,21 +18,20 @@ import rx.Observable;
  */
 
 public interface CourseService {
-    @POST("Course")
+    @POST("classes/Course")
     Observable<Course> addCourse(@Body Course course);
 
 
-    @GET("Course")
+    @GET("classes/Course")
     Observable<DataResult<Course>> queryCourseList(@Query("where") String where);
 
 
-    @PUT("Course/{objectId}")
+    @PUT("classes/Course/{objectId}")
     Observable<Course> updateCourse(@Path("objectId") String objectId, @Body Course course);
 
-    @DELETE("Course/{objectId}")
+    @DELETE("classes/Course/{objectId}")
     Observable<com.alibaba.fastjson.JSONObject> deleteCourse(@Path("objectId") String objectId);
 
-    @GET
-    Observable<DataResult<Course>> queryCourseListByCourseName(@Url String url,@Query("bql") String bql, @Query("values") String values);
-    //,@Query("values")String values
+    @GET("cloudQuery")
+    Observable<DataResult<Course>> queryCourseListByCourseName(@Query("bql") String bql, @Query("values") String values);
 }

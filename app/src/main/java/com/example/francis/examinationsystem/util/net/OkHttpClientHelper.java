@@ -15,20 +15,14 @@ class OkHttpClientHelper {
 
     public  static OkHttpClient getClient() {
         if (client == null) {
-            client = new OkHttpClient.Builder()
-                    .addInterceptor(new HeaderInterceptor())
-                    .addInterceptor(new HttpLoggingInterceptor())
-                    .connectTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
-                    .readTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
-                    .writeTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
-                    .build();
+            client = getClient("application/json");
         }
         return client;
     }
 
     public  static OkHttpClient getClient(String contentType) {
         return new OkHttpClient.Builder()
-                    .addInterceptor(new TestInterceptor(contentType))
+                    .addInterceptor(new HeaderInterceptor(contentType))
                     .addInterceptor(new HttpLoggingInterceptor())
                     .connectTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)
                     .readTimeout(Constants.Project.networkTimeout, TimeUnit.SECONDS)

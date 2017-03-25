@@ -41,9 +41,7 @@ public class ExamModel {
         }
         object.put("requests", lstMap);
 
-
-        return RetrofitHelper.getRetrofit(Constants.Project.batchBaseUrl).create(ExamService.class)
-                .addSubjectList(object)
+        return examService.addSubjectList(object)
                 .flatMap(new Func1<List<Map<String, Object>>, Observable<ExamPaper>>() {
                     @Override
                     public Observable<ExamPaper> call(List<Map<String, Object>> lstMap) {
@@ -52,7 +50,7 @@ public class ExamModel {
                             if (examPaper.getLstSubjectIds() == null) {
                                 examPaper.setLstSubjectIds(new ArrayList<String>());
                             }
-                            examPaper.getLstSubjectIds().add((String) ((Map<String,Object>) object.get("success")).get("objectId"));
+                            examPaper.getLstSubjectIds().add((String) ((Map<String, Object>) object.get("success")).get("objectId"));
                         }
                         return examService.addExamPaper(examPaper);
                     }
@@ -62,9 +60,9 @@ public class ExamModel {
     }
 
     public Observable<JSONObject> updateExamPaper(ExamPaper examPaper) {
-        Map<String ,Object> examMap=new HashMap<>();
-        examMap.put("name",examPaper.getName());
-        examMap.put("des",examPaper.getDes());
+        Map<String, Object> examMap = new HashMap<>();
+        examMap.put("name", examPaper.getName());
+        examMap.put("des", examPaper.getDes());
         return examService.updateExamPaper(examPaper.getObjectId(), examMap)
                 .subscribeOn(Schedulers.io());
     }

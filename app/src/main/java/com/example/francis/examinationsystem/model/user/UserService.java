@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -20,15 +21,14 @@ import rx.Observable;
  */
 
 public interface UserService {
-    @POST("User")
+    @POST("classes/User")
     Observable<User> register(@Body User user);
 
-    @GET("User")
+    @GET("classes/User")
     Observable<DataResult<User>> login(@Query("where") String where);
 
-    @PUT("User/{objectId}")
+    @PUT("classes/User/{objectId}")
     Observable<User> updatePsw(@Path("objectId") String objectId, @Body User user);
 
-    @POST
-    Observable<JSONObject> updateHead(@Header("Content-Type")String contentType, @Url String url, @Body byte[] headFile);
+    
 }

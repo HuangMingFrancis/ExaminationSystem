@@ -8,9 +8,13 @@ import com.example.francis.examinationsystem.entity.bmob.DataResult;
 import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
-import org.json.JSONException;
+import java.io.File;
 
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UploadFileListener;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -39,9 +43,9 @@ public class UserModel {
                 .flatMap(new Func1<DataResult<User>, Observable<User>>() {
                     @Override
                     public Observable<User> call(DataResult<User> userDataResult) {
-                        if (userDataResult.results.size()>0){
+                        if (userDataResult.results.size() > 0) {
                             return Observable.just(userDataResult.results.get(0));
-                        }else {
+                        } else {
                             return Observable.just(null);
                         }
                     }
@@ -49,30 +53,33 @@ public class UserModel {
     }
 
 
-    public Observable<User> updatePsw(String newPsw){
-        User user=new User();
+    public Observable<User> updatePsw(String newPsw) {
+        User user = new User();
         user.setUserPsw(newPsw);
         return userService.updatePsw(App.mUser.getObjectId(), user)
                 .subscribeOn(Schedulers.io());
     }
 
 
-    public Observable<String> updateHead(String fileName,byte[] headFile){
-        Log.i("http", "updateHead: "+fileName);
-        return userService.updateHead("application/x-jpg","https://api.bmob.cn/2/files/"+fileName,headFile)
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<org.json.JSONObject, Observable<String>>() {
+    public Observable<String> updateHead(String fileName, final String path) {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> subscriber) {
+                File file = new File(path);
+                final BmobFile bmobFile = new BmobFile(file);
+                bmobFile.uploadblock(new UploadFileListener() {
                     @Override
-                    public Observable<String> call(org.json.JSONObject jsonObject) {
-                        try {
-                            Log.i("http", "call: "+jsonObject.toString());
-                            return Observable.just(jsonObject.getString("url"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            subscriber.onNext(bmobFile.getFileUrl());
+                        } else {
+                            subscriber.onError(e.getCause());
                         }
-                        return null;
+                        subscriber.onCompleted();
                     }
                 });
+            }
+        }).subscribeOn(Schedulers.io());
     }
 
 }

@@ -110,8 +110,8 @@ public class CourseModel {
     }
 
     public Observable<List<Course>> queryCourseListByCourseName(String bql, List<Object> conditons) {
-        return RetrofitHelper.getRetrofit(Constants.Project.bqlBaseUrl).create(CourseService.class)
-                .queryCourseListByCourseName(Constants.Project.bqlBaseUrl, bql, JSONArray.toJSONString(conditons))
+        return courseService
+                .queryCourseListByCourseName(bql, JSONArray.toJSONString(conditons))
                 .flatMap(new Func1<DataResult<Course>, Observable<List<Course>>>() {
                     @Override
                     public Observable<List<Course>> call(final DataResult<Course> dataResult) {

@@ -28,17 +28,17 @@ public class AccountPresenter extends BasePresenter<IAccountView> {
     UserModel userModel;
 
     public AccountPresenter() {
-        userModel=new UserModel();
+        userModel = new UserModel();
     }
 
-    public void updataeUserHead(String fileName, File headFile,String path){
+    public void updataeUserHead(String fileName, String path) {
 
-        userModel.updateHead(fileName,imageToByte(path))
+        userModel.updateHead(fileName, path)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.i("http", "call: "+s);
+                        Log.i("http", "call: " + s);
                     }
                 }, new BmobErrorAction() {
                     @Override
@@ -49,7 +49,7 @@ public class AccountPresenter extends BasePresenter<IAccountView> {
     }
 
 
-    public byte[] getBitmapByte(Bitmap bitmap){
+    public byte[] getBitmapByte(Bitmap bitmap) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         try {
@@ -61,30 +61,23 @@ public class AccountPresenter extends BasePresenter<IAccountView> {
         return out.toByteArray();
     }
 
-    public static byte[] File2byte(File file)
-    {
+    public static byte[] File2byte(File file) {
         byte[] buffer = null;
-        try
-        {
+        try {
 //            File file = new File(filePath);
             FileInputStream fis = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] b = new byte[1024];
             int n;
-            while ((n = fis.read(b)) != -1)
-            {
+            while ((n = fis.read(b)) != -1) {
                 bos.write(b, 0, n);
             }
             fis.close();
             bos.close();
             buffer = bos.toByteArray();
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return buffer;

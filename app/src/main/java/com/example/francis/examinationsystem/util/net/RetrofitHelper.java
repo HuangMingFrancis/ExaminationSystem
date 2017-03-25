@@ -11,6 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitHelper {
+    /**
+     * 普通http请求
+     */
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofit() {
@@ -25,17 +28,7 @@ public class RetrofitHelper {
         return retrofit;
     }
 
-    public static void setRetrofit(Retrofit retrofit1) {
-        retrofit = retrofit1;
-    }
 
-    public static Retrofit getRetrofit(String url) {
-        return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(OkHttpClientHelper.getClient())
-                .baseUrl(url)
-                .build();
-    }
+
 
 }

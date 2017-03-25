@@ -80,9 +80,9 @@ public class LoginActivity extends MVPBaseActivity<ILoginView, LoginPresenter> i
 
     @Override
     public void login(User user) {
-        etLoginName.setText(user.getUserName());
+        etLoginName.setText(user.getUserAccount());
         etLoginPassword.setText(user.getUserPsw());
-        mPresenter.login(user.getUserName(),user.getUserPsw());
+        mPresenter.login(user.getUserAccount(),user.getUserPsw());
     }
 
     @Override

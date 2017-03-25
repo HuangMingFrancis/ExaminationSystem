@@ -23,16 +23,16 @@ import rx.Observable;
  */
 
 public interface ExamService {
-    @POST("ExamPaper")
+    @POST("classes/ExamPaper")
     Observable<ExamPaper> addExamPaper(@Body ExamPaper examPaper);
 
-    @PUT("ExamPaper/{objectId}")
+    @PUT("classes/ExamPaper/{objectId}")
     Observable<JSONObject> updateExamPaper(@Path("objectId") String objectId, @Body Map<String,Object> lstSubjects);
 
-    @DELETE("ExamPaper/{objectId}")
+    @DELETE("classes/ExamPaper/{objectId}")
     Observable<JSONObject> deleteExamPaper(@Path("objectId") String objectId);
 
-    @GET("ExamPaper")
+    @GET("classes/ExamPaper")
     Observable<DataResult<ExamPaper>> queryExamPaperList(@Query("where") String where);
 
     /**
@@ -44,20 +44,20 @@ public interface ExamService {
     @POST("batch")
     Observable<List<Map<String,Object>>> addSubjectList(@Body Map<String,Object> lstSubjects);
 
-    @POST("Subject")
+    @POST("classes/Subject")
     Observable<Subject> addSubject(@Body Subject subject);
 
-    @GET("Subject")
+    @GET("classes/Subject")
     Observable<Subject> querySubject(@Query("where") String where);
 
-    @GET("Subject")
+    @GET("classes/Subject")
     Observable<JSONObject> querySubjectList(@Query("where") String where);
 
-    @DELETE("Subject")
+    @DELETE("classes/Subject")
     Observable<JSONObject> deleteSubject(@Query("objectId") String objectId);
 
     //查找subjectType
-    @GET("SubjectType")
+    @GET("classes/SubjectType")
     Observable<SubjectType> querySubjectType(@Query("where") String where);
 
 }

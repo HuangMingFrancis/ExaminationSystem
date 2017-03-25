@@ -83,17 +83,17 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
 
     @Override
     protected void initData() {
-        if (App.mUser!=null){
+        if (App.mUser != null) {
             tvAccount.setText(App.mUser.getUserAccount());
             tvName.setText(App.mUser.getUserName());
             tvSchool.setText(App.mUser.getSchool());
-            account=App.mUser.getUserAccount();
+            account = App.mUser.getUserAccount();
         }
     }
 
     @Override
     protected void initView() {
-        setToolBar(toolbarMain,"个人信息");
+        setToolBar(toolbarMain, "个人信息");
     }
 
 
@@ -119,7 +119,7 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
             case R.id.tv_school:
                 break;
             case R.id.ll_account_password:
-                to(AccountUpdateActivity.class,new Intent());
+                to(AccountUpdateActivity.class, new Intent());
                 break;
         }
     }
@@ -169,12 +169,12 @@ public class AccountActivity extends MVPBaseActivity<IAccountView, AccountPresen
             }
             ImageLoaderUtils.displayNoDisk(mContext, imgAccountUser, Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
             File file = new File(Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
-            mPresenter.updataeUserHead(account+"logo.jpg",file,Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
+            mPresenter.updataeUserHead(account + "logo.jpg", Constants.Fold.PHOTO_FOLDER + account + "logo.jpg");
         }
         if (requestCode == IntentUtils.CAMERA_REQUEST && resultCode == RESULT_OK) {
             File file = new File(File_Path);
             ImageLoaderUtils.display(mContext, imgAccountUser, file.getPath());
-            mPresenter.updataeUserHead(account + "logo.jpg",file,file.getPath());
+            mPresenter.updataeUserHead(account + "logo.jpg", file.getPath());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.francis.examinationsystem.util.net;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.francis.examinationsystem.global.Constants;
@@ -18,9 +19,7 @@ import okhttp3.Response;
 public class HeaderInterceptor implements Interceptor {
     private String contentType;
 
-    public HeaderInterceptor() {
-        contentType="application/json";
-    }
+
 
     public HeaderInterceptor(String contentType) {
         this.contentType = contentType;
@@ -28,13 +27,21 @@ public class HeaderInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request original=chain.request();
-        Log.i("http","contentType: "+contentType);
-        Request request=original.newBuilder()
-                .addHeader("X-Bmob-Application-Id", Constants.Project.app_id)
-                .addHeader("X-Bmob-REST-API-Key", Constants.Project.rest_api_key)
-                .addHeader("Content-Type",contentType)
-                .build();
+        Request original = chain.request();
+        Request request;
+        if (!TextUtils.isEmpty(contentType)) {
+            request = original.newBuilder()
+                    .addHeader("X-Bmob-Application-Id", Constants.Project.app_id)
+                    .addHeader("X-Bmob-REST-API-Key", Constants.Project.rest_api_key)
+                    .addHeader("Content-Type", contentType)
+                    .build();
+        } else {
+            request = original.newBuilder()
+                    .addHeader("X-Bmob-Application-Id", Constants.Project.app_id)
+                    .addHeader("X-Bmob-REST-API-Key", Constants.Project.rest_api_key)
+                    .build();
+        }
+
         return chain.proceed(request);
     }
 }

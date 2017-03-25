@@ -44,10 +44,8 @@ public class Constants {
          * 一般网络请求超时时间
          */
         public static final long networkTimeout = 10;
-        public static final String baseUrl="https://api.bmob.cn/1/classes/";
-
-        public static final String bqlBaseUrl="https://api.bmob.cn/1/cloudQuery/";
-        public static final String batchBaseUrl="https://api.bmob.cn/1/";
+        public static final String baseUrl="https://api.bmob.cn/1/";
+        public static final String fileUrl=" https://api.bmob.cn/2/";
 
     }
 
