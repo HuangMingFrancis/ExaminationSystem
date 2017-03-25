@@ -59,6 +59,8 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
     //选项
     private String options;
 
+    private Subject subject;
+
     @Override
     public void showToast(String message) {
         Toaster.showShort(message);
@@ -90,11 +92,23 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
 
         if (getIntent()!=null){
             examType=getIntent().getIntExtra("examType",0);
+            subject= (Subject) getIntent().getSerializableExtra("subject");
             switch (examType){
                 case Constants.ExamType.EXAM_JUDGE:
                     view= LayoutInflater.from(mContext).inflate(R.layout.item_add_exam_judge,null);
                     rg_add_exam= (RadioGroup) view.findViewById(R.id.rg_add_exam);
                     rg_add_exam.setOnCheckedChangeListener(this);
+                    RadioButton rb_add_exam_true= (RadioButton) view.findViewById(R.id.rb_add_exam_true);
+                    RadioButton rb_add_exam_false= (RadioButton) view.findViewById(R.id.rb_add_exam_false);
+                    if (subject!=null){
+                        if (subject.getResultValue().equals("true")){
+                            rb_add_exam_false.setChecked(false);
+                            rb_add_exam_true.setChecked(true);
+                        }else{
+                            rb_add_exam_false.setChecked(false);
+                            rb_add_exam_true.setChecked(true);
+                        }
+                    }
                     break;
                 case Constants.ExamType.EXAM_MUTIPLE:
                     view= LayoutInflater.from(mContext).inflate(R.layout.item_add_exam_multiple_selection,null);
@@ -106,6 +120,33 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
                     cb_add_exam_b= (CheckBox) view.findViewById(R.id.cb_add_exam_b);
                     cb_add_exam_c= (CheckBox) view.findViewById(R.id.cb_add_exam_c);
                     cb_add_exam_d= (CheckBox) view.findViewById(R.id.cb_add_exam_d);
+                    if (subject!=null){
+                        String options=subject.getOptions();
+                        et_add_exam_a.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_a.getText().toString()+";","");
+
+                        et_add_exam_b.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_b.getText().toString()+";","");
+
+                        et_add_exam_c.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_c.getText().toString()+";","");
+
+                        et_add_exam_d.setText(options.substring(0,options.indexOf(";")));
+
+
+                        if (subject.getResultValue().contains("1")){
+                            cb_add_exam_a.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("2")){
+                            cb_add_exam_b.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("3")){
+                            cb_add_exam_c.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("4")){
+                            cb_add_exam_d.setChecked(true);
+                        }
+                    }
                     break;
                 case Constants.ExamType.EXAM_SHORT:
                     view= LayoutInflater.from(mContext).inflate(R.layout.item_add_exam_short_answer,null);
@@ -118,6 +159,40 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
                     et_add_exam_c= (EditText) view.findViewById(R.id.et_add_exam_c);
                     et_add_exam_d= (EditText) view.findViewById(R.id.et_add_exam_d);
                     rg_add_exam.setOnCheckedChangeListener(this);
+
+                    RadioButton rb_add_exam_a= (RadioButton) view.findViewById(R.id.rb_add_exam_a);
+                    RadioButton rb_add_exam_b= (RadioButton) view.findViewById(R.id.rb_add_exam_b);
+                    RadioButton rb_add_exam_c= (RadioButton) view.findViewById(R.id.rb_add_exam_c);
+                    RadioButton rb_add_exam_d= (RadioButton) view.findViewById(R.id.rb_add_exam_d);
+
+                    if (subject!=null){
+                        String options=subject.getOptions();
+                        et_add_exam_a.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_a.getText().toString()+";","");
+
+                        et_add_exam_b.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_b.getText().toString()+";","");
+
+                        et_add_exam_c.setText(options.substring(0,options.indexOf(";")));
+                        options.replace(et_add_exam_c.getText().toString()+";","");
+
+                        et_add_exam_d.setText(options.substring(0,options.indexOf(";")));
+
+
+                        if (subject.getResultValue().contains("1")){
+                            rb_add_exam_a.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("2")){
+                            rb_add_exam_b.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("3")){
+                            rb_add_exam_c.setChecked(true);
+                        }
+                        if (subject.getResultValue().contains("4")){
+                            rb_add_exam_d.setChecked(true);
+                        }
+                    }
+
                     break;
             }
             flytExamContent.addView(view);
@@ -125,6 +200,11 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
             et_add_exam_grade= (EditText) view.findViewById(R.id.et_add_exam_grade);
             et_add_exam_title= (EditText) view.findViewById(R.id.et_add_exam_title);
             btn_add_exam_submit= (Button) view.findViewById(R.id.btn_add_exam_submit);
+
+            if (subject!=null){
+                et_add_exam_title.setText(subject.getName());
+                et_add_exam_grade.setText(subject.getGrade()+"");
+            }
 
             btn_add_exam_submit.setOnClickListener(this);
         }

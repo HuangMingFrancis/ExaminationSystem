@@ -1,5 +1,6 @@
 package com.example.francis.examinationsystem.model.exam;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.ExamPaper;
 import com.example.francis.examinationsystem.entity.Subject;
@@ -103,8 +104,17 @@ public class ExamModel {
         return null;
     }
 
-    public Observable<Subject> querySubjectList(String where) {
-        return null;
+    public Observable<List<Subject>> querySubjectList(String where) {
+        return examService.querySubjectList(where)
+                .flatMap(new Func1<JSONObject, Observable<List<Subject>>>() {
+                    @Override
+                    public Observable<List<Subject>> call(JSONObject jsonObject) {
+
+                        return Observable.just(JSONArray.parseArray(
+                                jsonObject.getJSONArray("results").toString(),Subject.class));
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> deleteSubject(String objectId) {

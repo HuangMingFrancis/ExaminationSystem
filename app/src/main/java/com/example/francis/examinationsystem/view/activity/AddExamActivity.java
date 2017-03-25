@@ -39,7 +39,8 @@ import butterknife.OnClick;
  * Created by Francis on 2017/3/21.
  */
 
-public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresenter> implements IAddExamView {
+public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresenter> implements IAddExamView,ChooseSubjectAdapte.CallBack
+,CompoundButton.OnCheckedChangeListener{
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
     @BindView(R.id.btn_exam_judge)
@@ -59,6 +60,14 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
     private List<Subject> titles;
 
     private ExamPaper examPaper;
+
+    private BaseQuickAdapter mSearchSubjectAdapter;
+    private List<Subject> searchSubjects;
+    private List<Subject> checkSubjects;
+    private CheckBox cbChooseExamAll;
+    private int position=-1;
+
+
 
 
     @Override
@@ -89,9 +98,22 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
         }
 
         titles = new ArrayList<>();
-        mChooseSubjectAdapte = new ChooseSubjectAdapte(R.layout.item_choose_exam_subject, titles);
+        mChooseSubjectAdapte = new ChooseSubjectAdapte(R.layout.item_choose_exam_subject, titles,this,1);
         listExam.setAdapter(mChooseSubjectAdapte);
 
+        searchSubjects=new ArrayList<>();
+        checkSubjects=new ArrayList<>();
+
+        mChooseSubjectAdapte.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                AddExamActivity.this.position=position;
+                Intent intent=new Intent();
+                intent.putExtra("subject",titles.get(position));
+                intent.putExtra("examType",Integer.valueOf(String.valueOf(titles.get(position).getSubjectTypeId())));
+                toForResult(TitleDetailsActivity.class,intent,1);
+            }
+        });
     }
 
     @Override
@@ -118,10 +140,10 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
                 showSubjectChooseDialog(1);
                 break;
             case R.id.btn_exam_single_selection:
-                showSubjectChooseDialog(2);
+                showSubjectChooseDialog(3);
                 break;
             case R.id.btn_exam_multiple_selection:
-                showSubjectChooseDialog(3);
+                showSubjectChooseDialog(2);
                 break;
             case R.id.btn_exam_short_answer:
                 showSubjectChooseDialog(4);
@@ -135,10 +157,11 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
         final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_choose_exam_subject, null);
         RecyclerView listChooseExamSubjects = (RecyclerView) view.findViewById(R.id.list_choose_exam_subject);
-        CheckBox cbChooseExamAll = (CheckBox) view.findViewById(R.id.cb_choose_exam_allCheck);
+        cbChooseExamAll = (CheckBox) view.findViewById(R.id.cb_choose_exam_allCheck);
         Button btnChooseExamCreate = (Button) view.findViewById(R.id.btn_choose_exam_create);
         Button btnChooseExamAdd = (Button) view.findViewById(R.id.btn_choose_exam_add);
         final EditText etChooseExamSearch = (EditText) view.findViewById(R.id.et_choose_exam_search);
+        mPresenter.searchSubject(etChooseExamSearch.getText().toString(),type);
 
         etChooseExamSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -153,23 +176,23 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
 
             @Override
             public void afterTextChanged(Editable s) {
+                mPresenter.searchSubject(s.toString(),type);
             }
         });
 
         listChooseExamSubjects.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        listChooseExamSubjects.setAdapter(mChooseSubjectAdapte);
+        mSearchSubjectAdapter=new ChooseSubjectAdapte(R.layout.item_choose_exam_subject, searchSubjects,this,2);
 
-        cbChooseExamAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mChooseSubjectAdapte.notifyDataSetChanged();
-            }
-        });
+        listChooseExamSubjects.setAdapter(mSearchSubjectAdapter);
+
+        cbChooseExamAll.setOnCheckedChangeListener(this);
 
 
         btnChooseExamAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                titles.addAll(checkSubjects);
+                mChooseSubjectAdapte.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
@@ -180,15 +203,15 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
             public void onClick(View v) {
                 Intent intent = new Intent();
                 switch (type) {
-                    case 1:
+                    case 3:
                         intent.putExtra("examType", Constants.ExamType.EXAM_JUDGE);
                         toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
-                    case 2:
+                    case 1:
                         intent.putExtra("examType", Constants.ExamType.EXAM_SINGLE);
                         toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
-                    case 3:
+                    case 2:
                         intent.putExtra("examType", Constants.ExamType.EXAM_MUTIPLE);
                         toForResult(TitleDetailsActivity.class, intent, 0);
                         break;
@@ -235,6 +258,13 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
                 mChooseSubjectAdapte.notifyDataSetChanged();
             }
         }
+        if (requestCode==1&&resultCode==1){
+            if (data != null) {
+                Subject subject = (Subject) data.getSerializableExtra("subject");
+                titles.set(position,subject);
+                mChooseSubjectAdapte.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
@@ -248,5 +278,50 @@ public class AddExamActivity extends MVPBaseActivity<IAddExamView, AddExamPresen
 //        intent.putExtra("examPaper",examPaper);
 //        to(ExaminationActivity.class,new Intent());
         finish();
+    }
+
+    @Override
+    public void searchSubjectSuccess(List<Subject> searchSubjects) {
+        if (mSearchSubjectAdapter!=null){
+            this.searchSubjects.clear();
+            this.searchSubjects.addAll(searchSubjects);
+            mSearchSubjectAdapter.notifyDataSetChanged();
+
+            checkSubjects.clear();
+            cbChooseExamAll.setOnCheckedChangeListener(null);
+            cbChooseExamAll.setChecked(false);
+            cbChooseExamAll.setOnCheckedChangeListener(this);
+        }
+
+    }
+
+    @Override
+    public void checkSubjectList(List<Subject> checkSujects) {
+        this.checkSubjects.clear();
+        this.checkSubjects=checkSujects;
+        if (cbChooseExamAll!=null ){
+            if (checkSujects.size()==searchSubjects.size()){
+                cbChooseExamAll.setOnCheckedChangeListener(null);
+                cbChooseExamAll.setChecked(true);
+                cbChooseExamAll.setOnCheckedChangeListener(this);
+
+            }else{
+                cbChooseExamAll.setOnCheckedChangeListener(null);
+                cbChooseExamAll.setChecked(false);
+                cbChooseExamAll.setOnCheckedChangeListener(this);
+            }
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        for (int i=0;i<searchSubjects.size();i++) {
+            searchSubjects.get(i).setChecked(isChecked);
+        }
+        mSearchSubjectAdapter.notifyDataSetChanged();
+        checkSubjects.clear();
+        if (isChecked){
+            checkSubjects.addAll(searchSubjects);
+        }
     }
 }
