@@ -51,14 +51,14 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
     Button btnExamSubmit;
 
 
-    private int mYearStart,mYearEnd;
-    private int mMonthStart,mMonthEnd;
-    private int mDayStart,mDayEnd;
-    private int mHourStart,mHourEnd;
-    private int mMinuteStart,mMinuteEnd;
+    private int mYearStart, mYearEnd;
+    private int mMonthStart, mMonthEnd;
+    private int mDayStart, mDayEnd;
+    private int mHourStart, mHourEnd;
+    private int mMinuteStart, mMinuteEnd;
 
     //时间类型 0：开始时间 1：结束时间
-    private int timeType=0;
+    private int timeType = 0;
 
     private Calendar mCalendar;
 
@@ -68,7 +68,7 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
     private ExamPaper examPaperEdit;
 
     //examPaper状态 0: 新增  1:编辑
-    private int examPaperState=0;
+    private int examPaperState = 0;
 
     @Override
     public void showToast(String message) {
@@ -109,22 +109,22 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
         tvAddExamEndDate.setText(TimeUtils.getCurrentDateFormat(mCalendar));
         tvAddExamEndTime.setText(TimeUtils.getCurrentTimeFormat(mCalendar));
 
-        if (getIntent()!=null){
-            courseId=getIntent().getLongExtra("courseId",-1);
-            examPaperEdit= (ExamPaper) getIntent().getSerializableExtra("examPaper");
-            if (examPaperEdit!=null){
-                examPaperState=1;
+        if (getIntent() != null) {
+            courseId = getIntent().getLongExtra("courseId", -1);
+            examPaperEdit = (ExamPaper) getIntent().getSerializableExtra("examPaper");
+            if (examPaperEdit != null) {
+                examPaperState = 1;
                 etExamTitle.setText(examPaperEdit.getName());
                 etExamContent.setText(examPaperEdit.getDes());
-            }else {
-                examPaperState=0;
+            } else {
+                examPaperState = 0;
             }
         }
     }
 
     @Override
     protected void initView() {
-        setToolBar(toolbarMain,"新测试");
+        setToolBar(toolbarMain, "新测试");
     }
 
     @Override
@@ -142,55 +142,55 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_add_exam_startDate:
-                timeType=0;
+                timeType = 0;
                 showDateDialog();
                 break;
             case R.id.tv_add_exam_startTime:
-                timeType=0;
+                timeType = 0;
                 showTimeDialog();
                 break;
             case R.id.tv_add_exam_endDate:
-                timeType=1;
+                timeType = 1;
                 showDateDialog();
                 break;
             case R.id.tv_add_exam_endTime:
-                timeType=1;
+                timeType = 1;
                 showTimeDialog();
                 break;
             case R.id.btn_exam_submit:
-                if (TextUtils.isEmpty(etExamTitle.getText())){
+                if (TextUtils.isEmpty(etExamTitle.getText())) {
                     showToast("测试题目不能为空");
                     return;
                 }
-                if (TextUtils.isEmpty(etExamContent.getText())){
+                if (TextUtils.isEmpty(etExamContent.getText())) {
                     showToast("测试简介不能为空");
                     return;
                 }
-                if (examPaperState==0){
-                    Intent intent=new Intent();
-                    ExamPaper examPaper=new ExamPaper();
+                if (examPaperState == 0) {
+                    Intent intent = new Intent();
+                    ExamPaper examPaper = new ExamPaper();
                     examPaper.setName(etExamTitle.getText().toString());
                     examPaper.setDes(etExamContent.getText().toString());
                     examPaper.setCourseId(courseId);
                     try {
-                        examPaper.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                                parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
-                        examPaper.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                                parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
+                        examPaper.setPlanStartDate(new SimpleDateFormat("yyyy/MM/dd HH:mm").
+                                parse(tvAddExamStartDate.getText().toString() + " " + tvAddExamStartTime.getText().toString()).getTime());
+                        examPaper.setPlanEndDate(new SimpleDateFormat("yyyy/MM/dd HH:mm").
+                                parse(tvAddExamEndDate.getText().toString() + " " + tvAddExamEndTime.getText().toString()).getTime());
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    intent.putExtra("examPaper",examPaper);
-                    to(AddExamActivity.class,intent);
+                    intent.putExtra("examPaper", examPaper);
+                    to(AddExamActivity.class, intent);
                     finish();
-                }else if (examPaperState==1){
+                } else if (examPaperState == 1) {
                     examPaperEdit.setName(etExamTitle.getText().toString());
                     examPaperEdit.setDes(etExamContent.getText().toString());
                     try {
                         examPaperEdit.setPlanStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                                parse(tvAddExamStartDate.getText().toString()+tvAddExamStartTime.getText().toString()));
+                                parse(tvAddExamStartDate.getText().toString() + tvAddExamStartTime.getText().toString()).getTime());
                         examPaperEdit.setPlanEndDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").
-                                parse(tvAddExamEndDate.getText().toString()+tvAddExamEndTime.getText().toString()));
+                                parse(tvAddExamEndDate.getText().toString() + tvAddExamEndTime.getText().toString()).getTime());
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -208,13 +208,13 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
         new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if (timeType==0){
+                if (timeType == 0) {
                     mHourStart = hourOfDay;
                     mMinuteStart = minute;
                     mCalendar.set(Calendar.HOUR_OF_DAY, mHourStart);
                     mCalendar.set(Calendar.MINUTE, mMinuteStart);
                     tvAddExamStartTime.setText(hourOfDay + ":" + minute);
-                }else{
+                } else {
                     mHourEnd = hourOfDay;
                     mMinuteEnd = minute;
                     mCalendar.set(Calendar.HOUR_OF_DAY, mHourEnd);
@@ -222,7 +222,7 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                     tvAddExamEndTime.setText(hourOfDay + ":" + minute);
                 }
             }
-        },timeType==0? mHourStart:mHourEnd,timeType==0? mMinuteStart:mMinuteEnd, true).show();
+        }, timeType == 0 ? mHourStart : mHourEnd, timeType == 0 ? mMinuteStart : mMinuteEnd, true).show();
     }
 
     /**
@@ -232,13 +232,13 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
         new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if(timeType==0){
+                if (timeType == 0) {
                     mYearStart = year;
                     mMonthStart = monthOfYear + 1;
                     mDayStart = dayOfMonth;
                     mCalendar.set(mYearStart, mMonthStart - 1, mDayStart);
                     tvAddExamStartDate.setText(mYearStart + "/" + mMonthStart + "/" + mDayStart);
-                }else{
+                } else {
                     mYearEnd = year;
                     mMonthEnd = monthOfYear + 1;
                     mDayEnd = dayOfMonth;
@@ -246,7 +246,7 @@ public class AddExaminatinoActivity extends MVPBaseActivity<IAddExaminationView,
                     tvAddExamEndDate.setText(mYearEnd + "/" + mMonthEnd + "/" + mDayEnd);
                 }
             }
-        }, timeType==0?mYearStart:mYearEnd,timeType==0? mMonthStart - 1:mMonthEnd-1,timeType==0? mDayStart:mDayEnd).show();
+        }, timeType == 0 ? mYearStart : mYearEnd, timeType == 0 ? mMonthStart - 1 : mMonthEnd - 1, timeType == 0 ? mDayStart : mDayEnd).show();
     }
 
     @Override

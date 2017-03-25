@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 
 /**
@@ -39,12 +40,11 @@ public class ExamPaper extends BaseObject implements Serializable {
     /**
      * 开始时间
      */
-    private Date planStartDate;
+    private Long planStartDate;
     /**
      * 结束时间
      */
-    private Date planEndDate;
-
+    private Long planEndDate;
 
 
     public Long getId() {
@@ -87,19 +87,19 @@ public class ExamPaper extends BaseObject implements Serializable {
         this.lstSubjectIds = lstSubjectIds;
     }
 
-    public Date getPlanStartDate() {
+    public Long getPlanStartDate() {
         return planStartDate;
     }
 
-    public void setPlanStartDate(Date planStartDate) {
+    public void setPlanStartDate(Long planStartDate) {
         this.planStartDate = planStartDate;
     }
 
-    public Date getPlanEndDate() {
+    public Long getPlanEndDate() {
         return planEndDate;
     }
 
-    public void setPlanEndDate(Date planEndDate) {
+    public void setPlanEndDate(Long planEndDate) {
         this.planEndDate = planEndDate;
     }
 }
