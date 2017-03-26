@@ -50,6 +50,7 @@
         <activity android:name=".view.activity.AddExaminatinoActivity"/>
         <activity android:name=".view.activity.AddExamActivity"/>
         <activity android:name=".view.activity.TitleDetailsActivity"/>
+        <activity android:name=".view.activity.ExamSituationActivity"/>
     </application>
 
 </manifest>

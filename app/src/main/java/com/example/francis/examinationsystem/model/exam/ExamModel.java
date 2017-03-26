@@ -224,4 +224,16 @@ public class ExamModel {
                 })
                 .subscribeOn(Schedulers.io());
     }
+
+
+    public Observable<List<Solution>> querySolutionList(String where){
+        return examService.querySolutionList(where)
+                .flatMap(new Func1<DataResult<Solution>, Observable<List<Solution>>>() {
+                    @Override
+                    public Observable<List<Solution>> call(DataResult<Solution> solutionDataResult) {
+                        return Observable.just(solutionDataResult.results);
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
 }

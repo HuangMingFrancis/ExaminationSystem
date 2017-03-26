@@ -9,6 +9,9 @@ import com.example.francis.examinationsystem.global.App;
 import com.example.francis.examinationsystem.util.net.RetrofitHelper;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
@@ -81,5 +84,26 @@ public class UserModel {
             }
         }).subscribeOn(Schedulers.io());
     }
+
+
+    public Observable<User> queryUser(long userId){
+        Map<String,Object> userMap=new HashMap<>();
+        userMap.put("id",userId);
+        return userService.queryUser(JSONObject.toJSONString(userMap))
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<List<User>> queryUserByIds(String where){
+        return userService.queryUserByIds(where)
+                .flatMap(new Func1<DataResult<User>, Observable<List<User>>>() {
+                    @Override
+                    public Observable<List<User>> call(DataResult<User> userDataResult) {
+                        return Observable.just(userDataResult.results);
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+
 
 }

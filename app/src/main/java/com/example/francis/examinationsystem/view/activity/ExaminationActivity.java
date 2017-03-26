@@ -87,7 +87,8 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent();
                 if (App.mUser.getType() == 0) {
-
+                    intent.setClass(mContext, ExamSituationActivity.class);
+                    intent.putExtra("examPaper", lstExamPapers.get(position));
                 } else {
                     intent.setClass(mContext, ExamActivity.class);
                     intent.putExtra("examPaper", lstExamPapers.get(position));

@@ -30,5 +30,10 @@ public interface UserService {
     @PUT("classes/User/{objectId}")
     Observable<User> updatePsw(@Path("objectId") String objectId, @Body User user);
 
-    
+    @GET("classes/User")
+    Observable<User> queryUser(@Query("where")String where);
+
+    @GET("classes/User")
+    Observable<DataResult<User>> queryUserByIds(@Query("where")String where);
+
 }

@@ -69,4 +69,8 @@ public interface ExamService {
     @POST("batch")
     Observable<List<Map<String, Object>>> addSolutionList(@Body Map<String, Object> lstSolutions);
 
+
+    @GET("classes/Solution")
+    Observable<DataResult<Solution>> querySolutionList(@Query("where")String where);
+
 }
