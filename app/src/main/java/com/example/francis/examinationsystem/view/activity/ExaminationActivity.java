@@ -33,7 +33,7 @@ import static com.example.francis.examinationsystem.R.id.btn_course_tab_publish;
  */
 
 public class ExaminationActivity extends MVPBaseActivity<IExaminationView, ExaminationPresenter> implements IExaminationView
-    ,BaseQuickAdapter.OnItemChildClickListener,SwipeRefreshLayout.OnRefreshListener{
+        , BaseQuickAdapter.OnItemChildClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
     @BindView(R.id.list_examination)
@@ -73,8 +73,8 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
     @Override
     protected void initData() {
 
-        if (getIntent()!=null){
-            courseId=getIntent().getLongExtra("courseId",-1);
+        if (getIntent() != null) {
+            courseId = getIntent().getLongExtra("courseId", -1);
         }
 
         lstExamPapers = new ArrayList<>();
@@ -82,12 +82,17 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
         listExamination.setLayoutManager(manager);
         mExaminationAdapter = new ExaminationAdapter(lstExamPapers);
         listExamination.setAdapter(mExaminationAdapter);
-        mExaminationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mExaminationAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent=new Intent();
-                intent.putExtra("examPaperId",lstExamPapers.get(position).getId());
-                return false;
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent();
+                if (App.mUser.getType() == 0) {
+
+                } else {
+                    intent.setClass(mContext, ExamActivity.class);
+                    intent.putExtra("examPaper", lstExamPapers.get(position));
+                }
+                startActivity(intent);
             }
         });
 
@@ -106,7 +111,6 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     protected void loadData() {
-//        mPresenter.queryExamList(courseId);
     }
 
     @Override
@@ -116,8 +120,8 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @OnClick(btn_course_tab_publish)
     public void onClick() {
-        Intent intent =new Intent();
-        intent.putExtra("courseId",courseId);
+        Intent intent = new Intent();
+        intent.putExtra("courseId", courseId);
         toForResult(AddExaminatinoActivity.class, intent, 0);
     }
 
@@ -140,7 +144,7 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     public void loadExamListComplete(List<ExamPaper> lstExamPapers) {
-        if (freshExamination.isRefreshing()){
+        if (freshExamination.isRefreshing()) {
             freshExamination.setRefreshing(false);
         }
         this.lstExamPapers.clear();
@@ -162,24 +166,24 @@ public class ExaminationActivity extends MVPBaseActivity<IExaminationView, Exami
 
     @Override
     public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.img_t_exam_edit:
-                initPopupMenu(view,position);
+                initPopupMenu(view, position);
                 break;
         }
         return false;
     }
 
     private void initPopupMenu(View view, final int position) {
-        editExamPopup=new MyPopupMenu(mContext,view,R.menu.exampaper_edit_menu);
+        editExamPopup = new MyPopupMenu(mContext, view, R.menu.exampaper_edit_menu);
         editExamPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.item_menu_edit:
-                        Intent intent=new Intent();
-                        intent.putExtra("examPaper",lstExamPapers.get(position));
-                        to(AddExaminatinoActivity.class,intent);
+                        Intent intent = new Intent();
+                        intent.putExtra("examPaper", lstExamPapers.get(position));
+                        to(AddExaminatinoActivity.class, intent);
                         break;
                     case R.id.item_menu_delete:
                         mPresenter.deleteExamPaper(lstExamPapers.get(position));

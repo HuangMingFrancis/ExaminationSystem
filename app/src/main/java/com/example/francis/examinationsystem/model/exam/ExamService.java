@@ -2,6 +2,7 @@ package com.example.francis.examinationsystem.model.exam;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.francis.examinationsystem.entity.ExamPaper;
+import com.example.francis.examinationsystem.entity.Solution;
 import com.example.francis.examinationsystem.entity.Subject;
 import com.example.francis.examinationsystem.entity.SubjectType;
 import com.example.francis.examinationsystem.entity.bmob.DataResult;
@@ -18,6 +19,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
+import static android.R.attr.data;
+
 /**
  * Created by wzn on 2017/3/21.
  */
@@ -27,7 +30,7 @@ public interface ExamService {
     Observable<ExamPaper> addExamPaper(@Body ExamPaper examPaper);
 
     @PUT("classes/ExamPaper/{objectId}")
-    Observable<JSONObject> updateExamPaper(@Path("objectId") String objectId, @Body Map<String,Object> lstSubjects);
+    Observable<JSONObject> updateExamPaper(@Path("objectId") String objectId, @Body Map<String, Object> lstSubjects);
 
     @DELETE("classes/ExamPaper/{objectId}")
     Observable<JSONObject> deleteExamPaper(@Path("objectId") String objectId);
@@ -42,13 +45,13 @@ public interface ExamService {
      * @return
      */
     @POST("batch")
-    Observable<List<Map<String,Object>>> addSubjectList(@Body Map<String,Object> lstSubjects);
+    Observable<List<Map<String, Object>>> addSubjectList(@Body Map<String, Object> lstSubjects);
 
     @POST("classes/Subject")
     Observable<Subject> addSubject(@Body Subject subject);
 
     @GET("classes/Subject")
-    Observable<Subject> querySubject(@Query("where") String where);
+    Observable<DataResult<Subject>> querySubject(@Query("where") String where);
 
     @GET("classes/Subject")
     Observable<JSONObject> querySubjectList(@Query("where") String where);
@@ -58,6 +61,12 @@ public interface ExamService {
 
     //查找subjectType
     @GET("classes/SubjectType")
-    Observable<SubjectType> querySubjectType(@Query("where") String where);
+    Observable<DataResult<SubjectType>> querySubjectType(@Query("where") String where);
+
+    @GET("classes/Solution")
+    Observable<DataResult<Solution>> querySolution(@Query("where") String where);
+
+    @POST("batch")
+    Observable<List<Map<String, Object>>> addSolutionList(@Body Map<String, Object> lstSolutions);
 
 }

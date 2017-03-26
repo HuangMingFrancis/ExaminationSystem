@@ -55,9 +55,9 @@ public class TitleDetailsActivity extends MVPBaseActivity<ITitleDetailsView, Tit
     private View view;
 
     //正确答案
-    private String resultValue;
+    private String resultValue="";
     //选项
-    private String options;
+    private String options="";
 
     private Subject subject;
 

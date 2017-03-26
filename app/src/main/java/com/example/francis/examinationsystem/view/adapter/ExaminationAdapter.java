@@ -45,16 +45,20 @@ public class ExaminationAdapter extends BaseQuickAdapter<ExamPaper, BaseViewHold
         if (App.mUser.getType() == 0) {
             helper.setText(R.id.tv_t_exam_title, item.getName());
             helper.setText(R.id.tv_t_exam_content, item.getDes());
-//            helper.setText(R.id.tv_t_exam_publishTime, item.getPlanStartDate().toString());
-//            helper.setText(R.id.tv_t_exam_endTime,"截止:"+ item.getPlanEndDate().toString());
+            if (item.getPlanEndDate() != null) {
+                helper.setText(R.id.tv_t_exam_endTime, "截止:" + TimeUtils.getNotificationTime(item.getPlanEndDate()));
+            }
+            if (item.getPlanStartDate() != null) {
+                helper.setText(R.id.tv_t_exam_publishTime, TimeUtils.getNotificationTime(item.getPlanStartDate()));
+            }
             helper.addOnClickListener(R.id.img_t_exam_edit);
         } else {
             helper.setText(R.id.tv_exam_title, item.getName());
             helper.setText(R.id.tv_exam_content, item.getDes());
-            if(item.getPlanEndDate()!=null){
+            if (item.getPlanEndDate() != null) {
                 helper.setText(R.id.tv_exam_endTime, "截至" + TimeUtils.getNotificationTime(item.getPlanEndDate()));
             }
-            if(item.getPlanStartDate()!=null) {
+            if (item.getPlanStartDate() != null) {
                 helper.setText(R.id.tv_exam_publishTime, TimeUtils.getNotificationTime(item.getPlanStartDate()));
             }
         }
